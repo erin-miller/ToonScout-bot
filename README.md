@@ -26,6 +26,8 @@
   3. **Public Key**: This is located under "Application ID" in the General Information section.
   4. **Subdomain**: Enter a unique name for your subdomain. Letters, numbers, and hyphens can be used.
      - Examples: `toon1239812389`, `scout-92834290`
+    
+**NOTE**: Your App ID, Discord Token, and Public Key are all sensitive information. The values for these fields are stored locally on your computer and should not be shared anywhere else.
 
 ### Step 5: Set the Interactions Endpoint URL
 
