@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
 app.post('/interactions', async function (req, res) {
-    const { type, data, member } = req.body;
+    const { type, data, member, user: direct } = req.body;
     
     // verification requests
     if (type === InteractionType.PING) {
@@ -29,8 +29,18 @@ app.post('/interactions', async function (req, res) {
     // checking for commands
     if (type === InteractionType.APPLICATION_COMMAND) {
         const { name: command } = data;
-        const user = member.user.username;
-        const globalUser = member.user.global_name;
+
+        let user;
+        let globalUser;
+
+        // check if user has multiple discord accounts or not
+        if (direct) {
+            user = direct.username;
+            globalUser = direct.global_name;
+        } else {
+            user = member.user.username;
+            globalUser = member.user.username;
+        }
 
         console.log(`USER [ ${user} ] RAN [ ${command} ]`);
         
