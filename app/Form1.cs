@@ -8,14 +8,26 @@ namespace scout
     public partial class Form1 : Form
     {
         private Process runningProcess;
+        private System.Windows.Forms.Timer cooldown;
+        private int cooldownDuration = 1000;
         public Form1()
         {
             InitializeComponent();
+
+            cooldown = new System.Windows.Forms.Timer();
+            cooldown.Interval = cooldownDuration;
+            cooldown.Tick += Cooldown_tick;
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             LoadEnv();
+        }
+
+        private void Cooldown_tick(object sender, EventArgs e)
+        {
+            cooldown.Stop();
+            btnRunApp.Enabled = true;
         }
 
         private void btnRunApp_Click(object sender, EventArgs e)
@@ -35,6 +47,7 @@ namespace scout
         }
         private void btnStopApp_Click(object sender, EventArgs e)
         {
+            cooldown.Start(); 
             logFile.WriteLine("Stopping the application at " + DateTime.Now);
             logFile.Flush();
             StopStartup();
@@ -70,7 +83,6 @@ namespace scout
 
             runningProcess = Process.Start(processInfo);
 
-            // Create the StreamWriter outside the using block
             logFile = new StreamWriter(logPath, append: true);
             logFile.WriteLine("Starting the application at " + DateTime.Now);
             logFile.Flush();
@@ -80,7 +92,7 @@ namespace scout
                 if (!string.IsNullOrEmpty(args.Data))
                 {
                     logFile.WriteLine(args.Data);
-                    logFile.Flush(); // Ensure the data is written immediately
+                    logFile.Flush();
                 }
             };
 
@@ -89,7 +101,7 @@ namespace scout
                 if (!string.IsNullOrEmpty(args.Data))
                 {
                     logFile.WriteLine("ERROR: " + args.Data);
-                    logFile.Flush(); // Ensure the error is written immediately
+                    logFile.Flush();
                 }
             };
 
@@ -101,22 +113,19 @@ namespace scout
             if (runningProcess != null && !runningProcess.HasExited)
             {
                 runningProcess.Kill();
-                runningProcess.WaitForExit(); // Optional: wait for the process to exit
+                runningProcess.WaitForExit();
                 runningProcess = null;
             }
 
-            // Also terminate any other related processes (Node.js and LocalTunnel)
             KillProcessByName("node");
             KillProcessByName("lt");
 
-            btnRunApp.Enabled = true;
             btnStopApp.Enabled = false;
 
             // Close the log file if it's still open
             logFile?.Close();
             logFile = null; // Prevent further access
 
-            // Log a message to the log file
         }
 
     private void KillProcessByName(string processName)
