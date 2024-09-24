@@ -46,7 +46,7 @@
             this.labelAppId.AutoSize = true;
             this.labelAppId.Location = new System.Drawing.Point(49, 15);
             this.labelAppId.Name = "labelAppId";
-            this.labelAppId.Size = new System.Drawing.Size(51, 16);
+            this.labelAppId.Size = new System.Drawing.Size(43, 13);
             this.labelAppId.TabIndex = 0;
             this.labelAppId.Text = "App ID:";
             // 
@@ -55,7 +55,7 @@
             this.labelDiscordToken.AutoSize = true;
             this.labelDiscordToken.Location = new System.Drawing.Point(12, 41);
             this.labelDiscordToken.Name = "labelDiscordToken";
-            this.labelDiscordToken.Size = new System.Drawing.Size(99, 16);
+            this.labelDiscordToken.Size = new System.Drawing.Size(80, 13);
             this.labelDiscordToken.TabIndex = 1;
             this.labelDiscordToken.Text = "Discord Token:";
             // 
@@ -64,7 +64,7 @@
             this.labelPublicKey.AutoSize = true;
             this.labelPublicKey.Location = new System.Drawing.Point(32, 67);
             this.labelPublicKey.Name = "labelPublicKey";
-            this.labelPublicKey.Size = new System.Drawing.Size(73, 16);
+            this.labelPublicKey.Size = new System.Drawing.Size(60, 13);
             this.labelPublicKey.TabIndex = 2;
             this.labelPublicKey.Text = "Public Key:";
             // 
@@ -72,21 +72,21 @@
             // 
             this.txtAppId.Location = new System.Drawing.Point(98, 12);
             this.txtAppId.Name = "txtAppId";
-            this.txtAppId.Size = new System.Drawing.Size(262, 22);
+            this.txtAppId.Size = new System.Drawing.Size(262, 20);
             this.txtAppId.TabIndex = 3;
             // 
             // txtDiscordToken
             // 
             this.txtDiscordToken.Location = new System.Drawing.Point(98, 38);
             this.txtDiscordToken.Name = "txtDiscordToken";
-            this.txtDiscordToken.Size = new System.Drawing.Size(262, 22);
+            this.txtDiscordToken.Size = new System.Drawing.Size(262, 20);
             this.txtDiscordToken.TabIndex = 4;
             // 
             // txtPublicKey
             // 
             this.txtPublicKey.Location = new System.Drawing.Point(98, 64);
             this.txtPublicKey.Name = "txtPublicKey";
-            this.txtPublicKey.Size = new System.Drawing.Size(262, 22);
+            this.txtPublicKey.Size = new System.Drawing.Size(262, 20);
             this.txtPublicKey.TabIndex = 5;
             // 
             // btnRunApp
@@ -113,15 +113,15 @@
             // 
             this.txtSubdomain.Location = new System.Drawing.Point(98, 90);
             this.txtSubdomain.Name = "txtSubdomain";
-            this.txtSubdomain.Size = new System.Drawing.Size(262, 22);
+            this.txtSubdomain.Size = new System.Drawing.Size(262, 20);
             this.txtSubdomain.TabIndex = 8;
             // 
             // labelSubdomain
             // 
             this.labelSubdomain.AutoSize = true;
-            this.labelSubdomain.Location = new System.Drawing.Point(32, 93);
+            this.labelSubdomain.Location = new System.Drawing.Point(29, 93);
             this.labelSubdomain.Name = "labelSubdomain";
-            this.labelSubdomain.Size = new System.Drawing.Size(79, 16);
+            this.labelSubdomain.Size = new System.Drawing.Size(63, 13);
             this.labelSubdomain.TabIndex = 9;
             this.labelSubdomain.Text = "Subdomain:";
             // 
