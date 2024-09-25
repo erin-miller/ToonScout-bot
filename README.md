@@ -1,4 +1,4 @@
-# ToonScout Setup and Installation Guide
+# ToonScout Setup and Installation Guide (Windows)
 
 ## Prerequisites
 
@@ -7,7 +7,11 @@
 In order for ToonScout to function, **Node.js** needs to be installed. You can download it by running
 [this file](https://nodejs.org/dist/v20.17.0/node-v20.17.0-x64.msi).
 
+Windows Defender Firewall might block the app. If so, just hit **Allow Access** as seen below.
+
 During installation, it will present you with the option to install other software. Do **NOT** select the box.
+
+![Windows Defender Firewall Alert](/assets/firewall.png)
 
 ## Initial Setup
 
