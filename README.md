@@ -36,7 +36,7 @@ During installation, it will present you with the option to install other softwa
 - The ToonScout window will open, showing 4 fields you need to fill out:
   1. **App ID**: This can be found on the General Information section of your Discord app under "Application ID".
   2. **Discord Token**: In the Bot section of your app, click **Reset Token**, and follow the prompts to get your new token.
-  3. **Public Key**: This is located under "Application ID" in the General Information section.
+  3. **Public Key**: This can be found on the General Information section of your Discord app under "Public Key".
   4. **Subdomain**: Enter a unique name for your subdomain. Letters, numbers, and hyphens can be used.
      - Examples: `toon1239812389`, `scout-92834290`
 
@@ -45,7 +45,7 @@ During installation, it will present you with the option to install other softwa
 ### Step 5: Set the Interactions Endpoint URL
 
 1. Click **Run** in the ToonScout window.
-2. Go to your Discord app's general info page, scroll to **Interactions Endpoint URL**, and enter:  
+2. Go to your Discord app's General Information page, scroll to **Interactions Endpoint URL**, and enter:  
    `https://<YOUR_SUBDOMAIN>.loca.lt/interactions`
    - `YOUR_SUBDOMAIN` is the same value you entered in the previous step.
 3. Click **Save Changes**.
