@@ -5,21 +5,22 @@
     "main": "js/app.js",
     "type": "module",
     "engines": {
-      "node": ">=20.x"
+        "node": ">=20.x"
     },
     "scripts": {
-      "start": "node js/app.js",
-      "register": "node js/commands.js",
-      "dev": "nodemon js/app.js"
+        "start": "node js/app.js",
+        "register": "node js/commands.js",
+        "dev": "nodemon js/app.js"
     },
     "author": "Erin Miller",
     "license": "MIT",
     "dependencies": {
-      "discord-interactions": "^3.2.0",
-      "dotenv": "^16.0.3",
-      "express": "^4.18.2"
+        "discord-interactions": "^4.1.0",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "localtunnel": "^2.0.2"
     },
     "devDependencies": {
-      "nodemon": "^3.1.0"
+        "nodemon": "^3.1.7"
     }
-  }
+}
