@@ -1,5 +1,12 @@
 # ToonScout Setup and Installation Guide
 
+## Prerequisites
+
+### Node.js
+
+In order for ToonScout to function, **Node.js** needs to be installed. You can download it by running
+[this file](https://nodejs.org/dist/v20.17.0/node-v20.17.0-x64.msi).
+
 ## Initial Setup
 
 ### Step 1: Create a New Discord Application
@@ -26,7 +33,7 @@
   3. **Public Key**: This is located under "Application ID" in the General Information section.
   4. **Subdomain**: Enter a unique name for your subdomain. Letters, numbers, and hyphens can be used.
      - Examples: `toon1239812389`, `scout-92834290`
-    
+
 **NOTE**: Your App ID, Discord Token, and Public Key are all sensitive information. The values for these fields are stored locally on your computer and should not be shared anywhere else.
 
 ### Step 5: Set the Interactions Endpoint URL
