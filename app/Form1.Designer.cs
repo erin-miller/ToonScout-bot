@@ -94,7 +94,7 @@
             this.btnRunApp.Location = new System.Drawing.Point(98, 122);
             this.btnRunApp.Name = "btnRunApp";
             this.btnRunApp.Size = new System.Drawing.Size(75, 23);
-            this.btnRunApp.TabIndex = 6;
+            this.btnRunApp.TabIndex = 8;
             this.btnRunApp.Text = "Run";
             this.btnRunApp.UseVisualStyleBackColor = true;
             this.btnRunApp.Click += new System.EventHandler(this.btnRunApp_Click);
@@ -104,7 +104,7 @@
             this.btnStopApp.Location = new System.Drawing.Point(179, 122);
             this.btnStopApp.Name = "btnStopApp";
             this.btnStopApp.Size = new System.Drawing.Size(75, 23);
-            this.btnStopApp.TabIndex = 7;
+            this.btnStopApp.TabIndex = 9;
             this.btnStopApp.Text = "Stop";
             this.btnStopApp.UseVisualStyleBackColor = true;
             this.btnStopApp.Click += new System.EventHandler(this.btnStopApp_Click);
@@ -114,7 +114,7 @@
             this.txtSubdomain.Location = new System.Drawing.Point(98, 90);
             this.txtSubdomain.Name = "txtSubdomain";
             this.txtSubdomain.Size = new System.Drawing.Size(262, 20);
-            this.txtSubdomain.TabIndex = 8;
+            this.txtSubdomain.TabIndex = 6;
             // 
             // labelSubdomain
             // 
@@ -122,7 +122,7 @@
             this.labelSubdomain.Location = new System.Drawing.Point(29, 93);
             this.labelSubdomain.Name = "labelSubdomain";
             this.labelSubdomain.Size = new System.Drawing.Size(63, 13);
-            this.labelSubdomain.TabIndex = 9;
+            this.labelSubdomain.TabIndex = 7;
             this.labelSubdomain.Text = "Subdomain:";
             // 
             // Form1
