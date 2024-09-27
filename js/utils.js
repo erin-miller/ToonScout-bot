@@ -4,7 +4,6 @@ import { gagTracks } from './game.js';
 
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
-const ENDPOINT = "info.json"; 
 const HIGHEST_GAG = 7;
 const INDENT = `        `;
 let authToken = null;
@@ -59,11 +58,12 @@ export function VerifyDiscordRequest(clientKey) {
     }
   }
 
-export async function LocalToonRequest() {
+export async function LocalToonRequest(request) {
     let port = DEFAULT_PORT;
     initAuthToken();
+    const request = endpoint;
 
-    const url = `http://localhost:${port}/${ENDPOINT}`;
+    const url = `http://localhost:${port}/${request}`;
 
     try {
         const response = await fetch(url, {

@@ -10,6 +10,14 @@ import {
     getTaskInfo,
 } from './utils.js';
 
+// set request types
+const info = "info.json";
+const fish = "fish.json";
+const flowers = "flowers.json";
+const suits = "cogsuits.json";
+const golf = "golf.json";
+const racing = "racing.json";
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -45,7 +53,7 @@ app.post('/interactions', async function (req, res) {
         console.log(`USER [ ${user} ] RAN [ ${command} ]`);
         
         try {
-            const LOCAL_TOON = await LocalToonRequest();
+            const LOCAL_TOON = await LocalToonRequest("info.json");
             if (command === 'info') {
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,

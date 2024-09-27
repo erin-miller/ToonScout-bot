@@ -49,6 +49,28 @@ const GAGS = {
     ],
 }
 
+const SUIT = {
+    name: 'suit',
+    type: 1, 
+    description: 'Find information about your cog suits.',
+    integration_types: [1],
+    contexts: [0, 1, 2],
+    options: [
+        {
+            type: 3,
+            name: 'cog_type',
+            description: 'The cog type you want to see.',
+            required: true,
+            choices: [
+                { name: 'Sellbot', value: 'sell'},
+                { name: 'Cashbot', value: 'cash'},
+                { name: 'Lawbot', value: 'law'},
+                { name: 'Bossbot', value: 'boss'},
+            ]
+        },
+    ],
+}
+
 // const BLANK = {
 //     name: '',
 //     type: 1, 
@@ -61,6 +83,7 @@ const ALL_COMMANDS = [
   INFO,
   TASK,
   GAGS,
+  SUIT,
 ];
 
 InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS);
