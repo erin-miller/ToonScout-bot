@@ -8,6 +8,7 @@ import {
     simplifyLocation,
     getGagInfo,
     getTaskInfo,
+    getSuitInfo,
 } from './utils.js';
 
 // set request types
@@ -53,8 +54,9 @@ app.post('/interactions', async function (req, res) {
         console.log(`USER [ ${user} ] RAN [ ${command} ]`);
         
         try {
-            const LOCAL_TOON = await LocalToonRequest("info.json");
+            let LOCAL_TOON;
             if (command === 'info') {
+                LOCAL_TOON = await LocalToonRequest(info);
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                     data: {
@@ -64,6 +66,7 @@ app.post('/interactions', async function (req, res) {
             };
 
             if (command === 'tasks') {
+                LOCAL_TOON = await LocalToonRequest(info);
                 const index = data.options && data.options.length > 0 ? data.options[0].value : null;
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -74,6 +77,7 @@ app.post('/interactions', async function (req, res) {
             }
 
             if (command === 'gags') {
+                LOCAL_TOON = await LocalToonRequest(info);
                 // default to null if no option provided
                 const track = data.options && data.options.length > 0 ? data.options[0].value : null;
                 return res.send({
@@ -83,6 +87,16 @@ app.post('/interactions', async function (req, res) {
                     }
                 })
             }
+
+            if (command === 'suit')
+                LOCAL_TOON = await LocalToonRequest(suits);
+                const cogsuit = data.options[0].value;
+                return res.send({
+                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                    data: {
+                        content: getSuitInfo(LOCAL_TOON, cogsuit),
+                    }
+                })
 
         } catch (error) {
             console.error(error);

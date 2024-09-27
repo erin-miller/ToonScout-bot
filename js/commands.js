@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { InstallGlobalCommands } from './utils.js';
-import { gagTracks } from './game.js';
+import { gagTracks, suitTypes } from './game.js';
 
 const INFO = {
     name: 'info',
@@ -61,12 +61,7 @@ const SUIT = {
             name: 'cog_type',
             description: 'The cog type you want to see.',
             required: true,
-            choices: [
-                { name: 'Sellbot', value: 'sell'},
-                { name: 'Cashbot', value: 'cash'},
-                { name: 'Lawbot', value: 'law'},
-                { name: 'Bossbot', value: 'boss'},
-            ]
+            choices: suitTypes,
         },
     ],
 }

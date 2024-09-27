@@ -1,6 +1,10 @@
 import 'dotenv/config';
 import { verifyKey } from 'discord-interactions';
-import { gagTracks } from './game.js';
+import { 
+    gagTracks, 
+    getSuitByValue, 
+    numFacilities ,
+} from './game.js';
 
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
@@ -61,9 +65,9 @@ export function VerifyDiscordRequest(clientKey) {
 export async function LocalToonRequest(request) {
     let port = DEFAULT_PORT;
     initAuthToken();
-    const request = endpoint;
+    const endpoint = request;
 
-    const url = `http://localhost:${port}/${request}`;
+    const url = `http://localhost:${port}/${endpoint}`;
 
     try {
         const response = await fetch(url, {
@@ -192,6 +196,15 @@ export function getTaskTypeSimple(taskInfo) {
     } else { // display npc values for a visit task
         return `Visit ${taskInfo.to.building} on ${taskInfo.to.zone}, ${taskInfo.to.neighborhood}`;
     }
+}
+
+export function getSuitInfo(toon, type) {
+    const promo = toon[type].promotion.target - toon[type].promotion.current
+
+    if (!toon[type].hasDisguise) {
+        return `You don't have your ${getSuitByValue(type)} suit!`;
+    }
+    return numFacilities(promo, type);
 }
 
 function initAuthToken() {
