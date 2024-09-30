@@ -4,6 +4,7 @@ import {
     gagTracks, 
 } from './game.js';
 import SuitCalculator from 'toonapi-calculator/js/suits.js';
+import FishCalculator from 'toonapi-calculator/js/fish.js';
 
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
@@ -198,8 +199,25 @@ export function getTaskTypeSimple(taskInfo) {
 }
 
 export function getSuitInfo(toon, type) {
-    const suitcalc = new SuitCalculator(toon)
+    const suitcalc = new SuitCalculator(toon);
     return JSON.stringify(suitcalc.getBestPath(type));
+}
+
+export function getFishInfo(toon, type) {
+    const fishcalc = new FishCalculator(toon);
+    const footer = '\n-# The % rate reflects your chance of catching a new fish.'
+    if (type === 'location') {
+        const intro = 'Here\'s your top 5 locations!\n';
+        let topFive = fishcalc.sortBestLocation().slice(0,5);
+        topFive = topFive.map((place, index) => `${index+1}. ${place[0]}, **${Math.round(place[1] * 100)}%**`).join('\n');
+        return `${intro}${topFive}${footer}`;
+    } else if (type === 'rarity') {
+        const intro = 'Here\'s your top 5 easiest new fish!\n';
+        console.log(fishcalc.sortBestRarity());
+        let topFive = fishcalc.sortBestRarity().slice(0,5);
+        topFive = topFive.map((fish, index) => `${index+1}. ${fish.name} in ${fish.location}, **${Math.round(fish.probability*100)}%**`).join('\n');
+        return `${intro}${topFive}${footer}`;
+    }
 }
 
 function initAuthToken() {

@@ -9,6 +9,7 @@ import {
     getGagInfo,
     getTaskInfo,
     getSuitInfo,
+    getFishInfo,
 } from './utils.js';
 
 // set request types
@@ -85,19 +86,31 @@ app.post('/interactions', async function (req, res) {
                     data: {
                         content: getGagInfo(LOCAL_TOON, track),
                     }
-                })
+                });
             }
 
-            if (command === 'suit')
-                LOCAL_TOON = await LocalToonRequest(fish)
-                console.log(JSON.stringify(LOCAL_TOON));
-                const cogsuit = data.options[0].value;
+            if (command === 'suit') {
+                LOCAL_TOON = await LocalToonRequest(suits);
+                const cogsuit = data.options && data.options.length > 0 ? data.options[0].value : null;
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                     data: {
                         content: getSuitInfo(JSON.stringify(LOCAL_TOON), cogsuit),
                     }
-                })
+                });
+            }
+            
+            if (command === 'fish') {
+                LOCAL_TOON = await LocalToonRequest(fish);
+                const type = data.options && data.options.length > 0 ? data.options[0].value : null;
+                const fishInfo = getFishInfo(JSON.stringify(LOCAL_TOON), type);
+                return res.send({
+                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                    data: {
+                        content: fishInfo,
+                    }
+                });
+            }
 
         } catch (error) {
             console.error(error);
