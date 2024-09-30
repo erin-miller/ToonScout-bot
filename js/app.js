@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
-import { InteractionType, InteractionResponseType } from 'discord-interactions';
+import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
 import {
     VerifyDiscordRequest,
     LocalToonRequest,
@@ -26,9 +26,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 
-app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
+// app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
-app.post('/interactions', async function (req, res) {
+app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
+    const message = req.body;
+    if (message.type === InteractionType.APPLICATION_COMMAND) {
+        res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+                content: 'Hello world',
+            },
+        });
+    }
+
     const { type, data, member, user: direct } = req.body;
     
     // verification requests
