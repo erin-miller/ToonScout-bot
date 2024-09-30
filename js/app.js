@@ -89,12 +89,13 @@ app.post('/interactions', async function (req, res) {
             }
 
             if (command === 'suit')
-                LOCAL_TOON = await LocalToonRequest(suits);
+                LOCAL_TOON = await LocalToonRequest(fish)
+                console.log(JSON.stringify(LOCAL_TOON));
                 const cogsuit = data.options[0].value;
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                     data: {
-                        content: getSuitInfo(LOCAL_TOON, cogsuit),
+                        content: getSuitInfo(JSON.stringify(LOCAL_TOON), cogsuit),
                     }
                 })
 

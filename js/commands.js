@@ -66,6 +66,23 @@ const SUIT = {
     ],
 }
 
+const FISH = {
+    name: 'fish',
+    type: 1, 
+    description: '',
+    integration_types: [1],
+    contexts: [0, 1, 2],
+    options: [
+        {
+            type: 3,
+            name: 'advising',
+            description: 'What fish or where should I go?',
+            required: true,
+            choices: fishTypes,
+        }
+    ]
+}
+
 // const BLANK = {
 //     name: '',
 //     type: 1, 

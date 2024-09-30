@@ -2,9 +2,8 @@ import 'dotenv/config';
 import { verifyKey } from 'discord-interactions';
 import { 
     gagTracks, 
-    getSuitByValue, 
-    numFacilities ,
 } from './game.js';
+import SuitCalculator from 'toonapi-calculator/js/suits.js';
 
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
@@ -199,12 +198,8 @@ export function getTaskTypeSimple(taskInfo) {
 }
 
 export function getSuitInfo(toon, type) {
-    const promo = toon[type].promotion.target - toon[type].promotion.current
-
-    if (!toon[type].hasDisguise) {
-        return `You don't have your ${getSuitByValue(type)} suit!`;
-    }
-    return numFacilities(promo, type);
+    const suitcalc = new SuitCalculator(toon)
+    return JSON.stringify(suitcalc.getBestPath(type));
 }
 
 function initAuthToken() {
