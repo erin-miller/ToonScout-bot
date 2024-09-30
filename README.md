@@ -71,4 +71,4 @@ During installation, it will present you with the option to install other softwa
 
 ---
 
-With this setup, you’re ready to enhance your Toontown experience with ToonScout. Enjoy!
+## [Suggestions or Questions? Submit here!](https://github.com/erin-miller/ToonAPI-Calculator/issues)
