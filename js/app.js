@@ -26,16 +26,6 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 
 app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
-    const message = req.body;
-    if (message.type === InteractionType.APPLICATION_COMMAND) {
-        res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-                content: 'Hello world',
-            },
-        });
-    }
-
     const { type, data, member, user: direct } = req.body;
     
     // verification requests
