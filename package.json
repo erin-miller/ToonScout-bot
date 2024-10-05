@@ -1,6 +1,6 @@
 {
     "name": "toonscout",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Display information about your current toon.",
     "main": "js/app.js",
     "type": "module",
@@ -9,7 +9,7 @@
     },
     "scripts": {
         "start": "node js/app.js",
-        "register": "node js/commands.js",
+        "register": "node js/install_commands.js",
         "dev": "nodemon js/app.js"
     },
     "author": "Erin Miller",

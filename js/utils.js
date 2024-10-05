@@ -1,15 +1,7 @@
 import 'dotenv/config';
-import { verifyKey } from 'discord-interactions';
-import { 
-    gagTracks, 
-} from './game.js';
-import SuitCalculator from 'toonapi-calculator/js/suits.js';
-import FishCalculator from 'toonapi-calculator/js/fish.js';
 
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
-const HIGHEST_GAG = 7;
-const INDENT = `        `;
 let authToken = null;
 
 export async function DiscordRequest(endpoint, options) {
@@ -80,133 +72,14 @@ export async function LocalToonRequest(request) {
     throw new Error('Failed to connect to API server on any port');
 }
 
-export function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+export function getUser(req) {
+    const { user: direct, member } = req.body;
+    return direct ? direct.username : member.user.username;
 }
 
-export function simplifyLaff(toon) {
-    return `${toon.laff.current}/${toon.laff.max}`;
-}
-
-export function simplifyLocation(toon) {
-    const loc = toon.location;
-    let msg = `${loc.district}, ${loc.zone}`;
-    if (loc.zone !== loc.neighborhood) {
-        msg += `, ${loc.neighborhood}`
-    }
-    return msg;
-}
-
-export function getGagInfo(toon, userTrack) {
-    const toonName = toon.toon.name;
-    let gagInfo;
-    if (userTrack) {
-        gagInfo = toon.gags[userTrack];
-        if (!gagInfo) {
-            return `${toonName} does not have the ${userTrack} track.`;
-        } else if (gagInfo.gag.level === HIGHEST_GAG) {
-            return `${toonName} has **maxed** the ${userTrack} track.`;
-        } else {
-            return `${toonName} has **${gagInfo.experience.current}/${gagInfo.experience.next}** left to earn ${gagInfo.gag.name}, the next ${userTrack} gag.`;
-        }
-    } else { // no track selected, print overview of all tracks
-        gagInfo = toon.gags;
-        let allGags = ``;
-        let hasOrg = false;
-        let organic = `${INDENT}No organic track.\n${INDENT}`;
-
-        // locate all tracks 
-        for (let track of gagTracks) {
-            if (gagInfo[track.value]) { // track exists, add info to allGags
-                allGags += `${gagInfo[track.value].gag.name}, `;
-
-                // find organic if there is one
-                if (!hasOrg && gagInfo[track.value].organic) {
-                    hasOrg = true;
-                    organic = `${INDENT}Organic ${track.value}\n${INDENT}`;
-                }
-            }
-        }
-
-        // remove extra ', '
-        allGags = allGags.slice(0, -2);
-        return `**${toonName}**'s gags with ${toon.laff.max} laff:\n` + organic + allGags;
-    }
-}
-
-export function getTaskInfo(toon, index) {
-    // index is not 0-index based; it is in [1,2,...,tasks.length-1]
-    const toonName = toon.toon.name;
-    let deletable; 
-    let taskInfo;
-    index = index ? Number(index) : null;
-    if (index) { // selected a specific task
-        if (index > toon.tasks.length) {
-            return `${toonName} has no task in slot ${index}.`
-        }
-        taskInfo = toon.tasks[index-1];
-        deletable = taskInfo.deletable ? ` Just for Fun` : ``; 
-        return `**${toonName}'s**${deletable} task ${index}:\n${INDENT}${getTaskTypeDetailed(taskInfo)}`
-    } else {
-        if (toon.tasks.length === 0) {
-            return `**${toonName}** has no tasks.`
-        }
-        let allTasks = ``;
-        for (let i = 0; i < toon.tasks.length; i++) {
-            taskInfo = toon.tasks[i];
-            deletable = taskInfo.deletable ? ` _Just for Fun_` : ``; 
-            allTasks += `${INDENT}Task **${i+1}:** ${getTaskTypeSimple(taskInfo)}${deletable}\n`
-        }
-        return `**${toonName}** is working on:\n` + allTasks;
-    }
-}
-
-export function getTaskTypeDetailed(taskInfo) {
-    console.log(JSON.stringify(taskInfo));
-    const progress = taskInfo.objective.progress.text;
-    if (progress !== 'Complete' && progress !== '') { // not a visit task, don't display npc values
-        return `**Objective:** ${taskInfo.objective.text}
-        **Progress:** ${taskInfo.objective.progress.text}
-        **Reward:** ${taskInfo.reward}`;
-    } else { // display npc values for a visit task
-        return `**Objective:** Visit ${taskInfo.to.name} in ${taskInfo.to.building}
-        **Location:** ${taskInfo.to.zone}, ${taskInfo.to.neighborhood}
-        **Reward:** ${taskInfo.reward}`;
-    }
-}
-
-export function getTaskTypeSimple(taskInfo) {
-    const progress = taskInfo.objective.progress.text;
-    if (progress !== 'Complete' && progress !== '') { // not a visit task, don't display npc values
-        return `${taskInfo.objective.text} (${taskInfo.objective.progress.text})`;
-    } else { // display npc values for a visit task
-        return `Visit ${taskInfo.to.building} on ${taskInfo.to.zone}, ${taskInfo.to.neighborhood}`;
-    }
-}
-
-export function getSuitInfo(toon, type) {
-    const suitcalc = new SuitCalculator(toon);
-    return JSON.stringify(suitcalc.getBestPath(type));
-}
-
-export function getFishInfo(toon, type) {
-    const fishcalc = new FishCalculator(toon);
-    console.log(toon);
-    if (fishcalc.getNew().length == 0) {
-        return `You have maxed fishing. Congratulations!`;
-    }
-    const footer = '\n-# The % rate reflects your chance of catching a new fish.'
-    if (type === 'location') {
-        let topFive = fishcalc.sortBestLocation().slice(0,5);
-        const intro = `Here\'s your top ${fishcalc.length} locations!\n`;
-        topFive = topFive.map((place, index) => `${index+1}. ${place[0]}:  **${Math.round(place[1] * 100)}%**`).join('\n');
-        return `${intro}${topFive}${footer}`;
-    } else if (type === 'rarity') {
-        let topFive = fishcalc.sortBestRarity().slice(0,5);
-        const intro = `Here\'s your top ${fishcalc.length} easiest new fish!\n`;
-        topFive = topFive.map((fish, index) => `${index+1}. ${fish.name} in ${fish.location}: ~**${fish.buckets}** buckets (${Math.round(fish.probability*100)}%)`).join('\n');
-        return `${intro}${topFive}${footer}`;
-    }
+export function getGlobalUser(req) {
+    const { user: direct, member } = req.body;
+    return direct ? direct.global_name : member.user.username;
 }
 
 function initAuthToken() {

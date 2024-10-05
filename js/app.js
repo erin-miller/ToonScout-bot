@@ -1,117 +1,59 @@
 import 'dotenv/config';
 import express from 'express';
 import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
-import {
-    LocalToonRequest,
-    simplifyLaff,
-    simplifyLocation,
-    getGagInfo,
-    getTaskInfo,
-    getSuitInfo,
-    getFishInfo,
-} from './utils.js';
-
-// set request types
-const info = "info.json";
-const fish = "fish.json";
-const flowers = "flowers.json";
-const suits = "cogsuits.json";
-const golf = "golf.json";
-const racing = "racing.json";
+import { getUser } from './utils.js';
+import { readdirSync } from 'fs';
+import path from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 // Create an express app
 const app = express();
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
+app.commands = new Map();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const commandsPath = path.resolve(__dirname, 'commands');
+const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const fileUrl = pathToFileURL(filePath); // Convert to a file URL
+    const command = await import(fileUrl.href); // Use the URL with import
+    if ('data' in command && 'execute' in command) {
+        app.commands.set(command.data.name, command)
+    } else {
+        console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+    }
+}
 
 app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async function (req, res) {
-    const { type, data, member, user: direct } = req.body;
+    const { type, data } = req.body;
+    const user = getUser(req);
     
     // verification requests
     if (type === InteractionType.PING) {
         return res.send({ type: InteractionResponseType.PONG });
     }
-
+    
     // checking for commands
     if (type === InteractionType.APPLICATION_COMMAND) {
-        const { name: command } = data;
+        const { name } = data;
+        console.log(`USER [ ${user} ] RAN [ ${name} ]`);
+        const cmd = app.commands.get(name); 
 
-        let user;
-        let globalUser;
-
-        // check if user has multiple discord accounts or not
-        if (direct) {
-            user = direct.username;
-            globalUser = direct.global_name;
-        } else {
-            user = member.user.username;
-            globalUser = member.user.username;
-        }
-
-        console.log(`USER [ ${user} ] RAN [ ${command} ]`);
-        
         try {
-            let LOCAL_TOON;
-            if (command === 'info') {
-                LOCAL_TOON = await LocalToonRequest(info);
-                return res.send({
-                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: {
-                        content: `${globalUser}'s toon, **${LOCAL_TOON.toon.name}**, has ${simplifyLaff(LOCAL_TOON)} laff and is located in ${simplifyLocation(LOCAL_TOON)}.`,
-                    },
-                });
-            };
-
-            if (command === 'tasks') {
-                LOCAL_TOON = await LocalToonRequest(info);
-                const index = data.options && data.options.length > 0 ? data.options[0].value : null;
-                return res.send({
-                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: {
-                        content: getTaskInfo(LOCAL_TOON, index),
-                    }
-                });
-            }
-
-            if (command === 'gags') {
-                LOCAL_TOON = await LocalToonRequest(info);
-                // default to null if no option provided
-                const track = data.options && data.options.length > 0 ? data.options[0].value : null;
-                return res.send({
-                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: {
-                        content: getGagInfo(LOCAL_TOON, track),
-                    }
-                });
-            }
-
-            if (command === 'suit') {
-                LOCAL_TOON = await LocalToonRequest(suits);
-                const cogsuit = data.options && data.options.length > 0 ? data.options[0].value : null;
-                return res.send({
-                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: {
-                        content: getSuitInfo(JSON.stringify(LOCAL_TOON), cogsuit),
-                    }
-                });
-            }
-            
-            if (command === 'fish') {
-                LOCAL_TOON = await LocalToonRequest(fish);
-                const type = data.options && data.options.length > 0 ? data.options[0].value : null;
-                const fishInfo = getFishInfo(JSON.stringify(LOCAL_TOON), type);
-                return res.send({
-                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: {
-                        content: fishInfo,
-                    }
-                });
-            }
-
+            return cmd.execute(req, res)
         } catch (error) {
             console.error(error);
-        }
+            return res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: { content: 'There was an error while executing this command!', ephemeral: true }
+            });
+        }            
     }
 });
 
