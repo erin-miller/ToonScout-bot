@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
 import { fishTypes } from '../game.js';
 import FishCalculator from 'toonapi-calculator/js/fish.js';
@@ -22,6 +22,10 @@ export async function execute(req, res) {
     const { data } = req.body;
     const type = data.options && data.options.length > 0 ? data.options[0].value : null;
     const fishInfo = getFishInfo(JSON.stringify(LOCAL_TOON), type);
+
+    const embed = new EmbedBuilder() {
+        .setColor('')
+    }
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {

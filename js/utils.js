@@ -82,6 +82,11 @@ export function getGlobalUser(req) {
     return direct ? direct.global_name : member.user.username;
 }
 
+export function getToonRendition(local_toon, pose) {
+    const dna = local_toon.toon.style;
+    return `https://rendition.toontownrewritten.com/render/${dna}/${pose}/1024x1024.png`
+}
+
 function initAuthToken() {
     if (!authToken) {
         authToken = Math.random().toString(36).substring(2);
