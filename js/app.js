@@ -66,6 +66,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
         if (cmd && cmd.handleButton) {
             try {
+                console.log(`Running ${customId} button...`);
                 const result = await cmd.handleButton(customId);
 
                 return res.send({

@@ -40,7 +40,8 @@ export async function execute(req, res) {
     
     const row = new ActionRowBuilder()
         .addComponents(
-            getWhatButton(), getWhereButton()
+            getWhatButton(),
+            getWhereButton()
         )
 
     return res.send({
@@ -85,7 +86,7 @@ export async function handleButton(customId) {
             return;
     }
 
-    return { embed, row }
+    return { embed, row };
 }
 
 function getHomeEmbed(LOCAL_TOON) {
