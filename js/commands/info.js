@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
 import { LocalToonRequest, getGlobalUser } from '../utils.js';
 
@@ -11,11 +11,21 @@ export const data = new SlashCommandBuilder()
 export async function execute(req, res) {
     const LOCAL_TOON = await LocalToonRequest('info.json');
     const globalUser = getGlobalUser(req);
+    const dna = LOCAL_TOON.toon.style;
+
+    const embed = new EmbedBuilder()
+        .setColor('Greyple')
+        .setAuthor({ name: LOCAL_TOON.toon.name, iconURL: `https://rendition.toontownrewritten.com/render/${dna}/laffmeter/1024x1024.png` })
+        .setThumbnail(`https://rendition.toontownrewritten.com/render/${dna}/waving/1024x1024.png`)
+        .addFields(
+            { name: 'Laff', value: simplifyLaff(LOCAL_TOON) },
+            { name: 'Location', value: simplifyLocation(LOCAL_TOON) }
+        )
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { 
-            content: `${globalUser}'s toon, **${LOCAL_TOON.toon.name}**, has ${simplifyLaff(LOCAL_TOON)} laff and is located in ${simplifyLocation(LOCAL_TOON)}.`,
+        data: {
+            embeds: [embed]
         }
     });
 }
