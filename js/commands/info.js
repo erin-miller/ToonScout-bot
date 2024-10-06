@@ -10,7 +10,6 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(req, res) {
     const LOCAL_TOON = await LocalToonRequest('info.json');
-    const dna = LOCAL_TOON.toon.style;
 
     const embed = new EmbedBuilder()
         .setColor('Greyple')

@@ -46,7 +46,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         const cmd = app.commands.get(name); 
 
         try {
-            return cmd.execute(req, res)
+            return await cmd.execute(req, res)
         } catch (error) {
             console.error(error);
             return res.send({
@@ -54,6 +54,36 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
                 data: { content: 'There was an error while executing this command!', ephemeral: true }
             });
         }            
+    }
+
+    // handle button interactions
+    if (type == InteractionType.MESSAGE_COMPONENT) {
+        const customId = data.custom_id;
+
+        console.log(`USER [ ${user} ] CLICKED [ ${customId} ]`);
+
+        const cmd = app.commands.get(customId.split('-')[0]);
+
+        if (cmd && cmd.handleButton) {
+            try {
+                const result = await cmd.handleButton(customId);
+
+                return res.send({
+                    type: InteractionResponseType.UPDATE_MESSAGE,
+                    data: {
+                        embeds: [result.embed],
+                        components: [result.row],
+                    }
+                })
+            }
+            catch (error) {
+                console.error(error);
+                return res.send({
+                    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                    data: { content: 'Button interaction error.' },
+                });
+            }
+        }
     }
 });
 

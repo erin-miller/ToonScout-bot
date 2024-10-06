@@ -14,8 +14,3 @@ export const suitTypes = [
     { name: 'Lawbot', value: 'l'},
     { name: 'Bossbot', value: 'c'},
 ]
-
-export const fishTypes = [
-    { name: 'Where?', value: 'location' },
-    { name: 'What?', value: 'rarity'},
-]
