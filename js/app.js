@@ -44,7 +44,6 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
         const { name } = data;
         console.log(`USER [ ${user} ] RAN [ ${name} ]`);
         const cmd = app.commands.get(name); 
-
         try {
             return await cmd.execute(req, res)
         } catch (error) {
