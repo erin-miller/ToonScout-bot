@@ -121,7 +121,6 @@ function getGagInfo(toon) {
     return allGags.join('\n');
 }
 
-
 function getGagProgress(toon) {
     const tracks = toon.gags;
     let gagProgress = [];
