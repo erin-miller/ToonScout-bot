@@ -1,6 +1,6 @@
 {
     "name": "toonscout",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "Display information about your current toon.",
     "main": "js/app.js",
     "type": "module",
