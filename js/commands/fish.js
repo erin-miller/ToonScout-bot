@@ -43,7 +43,7 @@ export async function execute(req, res) {
             getWhatButton(),
             getWhereButton()
         )
-
+    
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -57,33 +57,40 @@ export async function handleButton(customId) {
     const LOCAL_TOON = await LocalToonRequest('all.json');
     let embed;
     let row;
-    switch (customId) {
-        case 'fish-home':
-            embed = getHomeEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getWhatButton(), 
-                    getWhereButton()
-                )
-            break;
-        case 'fish-where':
-            embed = getWhereEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(), 
-                    getWhatButton()
-                )
-            break;
-        case 'fish-what':
-            embed = getWhatEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(), 
-                    getWhereButton()
-                )
-            break;
-        default:
-            return;
+
+    const [, actionWithState] = customId.split('-');
+    const [action, state] = actionWithState.split(':');
+
+    if (action === 'refresh') {
+        switch (state) {
+            case 'where':
+                embed = getWhereEmbed(LOCAL_TOON);
+                row = getWhereRow();
+                break;
+            case 'what':
+                embed = getWhatEmbed(LOCAL_TOON);
+                row = getWhatRow();
+                break;
+            default:
+                return;
+        }
+    } else {
+        switch (customId) {
+            case 'fish-home':
+                embed = getHomeEmbed(LOCAL_TOON);
+                row = getHomeRow();
+                break;
+            case 'fish-where':
+                embed = getWhereEmbed(LOCAL_TOON);
+                row = getWhereRow();
+                break;
+            case 'fish-what':
+                embed = getWhatEmbed(LOCAL_TOON);
+                row = getWhatRow();
+                break;
+            default:
+                return;
+        }
     }
 
     return { embed, row };
@@ -140,6 +147,39 @@ function getHomeButton() {
         .setCustomId('fish-home')
         .setLabel('Home')
         .setStyle('Primary')
+}
+
+function getRefreshButton(type) {
+    return new ButtonBuilder()
+        .setCustomId(`fish-refresh:${type}`)
+        .setLabel('Refresh')
+        .setStyle('Danger')
+}
+
+function getHomeRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getWhatButton(), 
+            getWhereButton()
+        )
+}
+
+function getWhatRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('what'),
+            getHomeButton(), 
+            getWhereButton()
+        )
+}
+
+function getWhereRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('where'),
+            getHomeButton(), 
+            getWhatButton()
+        )
 }
 
 function getRandomFish() {

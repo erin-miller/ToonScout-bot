@@ -44,62 +44,118 @@ export async function handleButton(customId) {
     const LOCAL_TOON = await LocalToonRequest('all.json');
     let embed;
     let row;
-    switch (customId) {
-        case 'suit-home':
-            embed = getHomeEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getSellButton(),
-                    getCashButton(),
-                    getLawButton(),
-                    getBossButton()
-                )
-            break;
-        case 'suit-sell':
-            embed = getSellEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(),
-                    getCashButton(),
-                    getLawButton(),
-                    getBossButton()
-                )
-            break;
-        case 'suit-cash':
-            embed = getCashEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(),
-                    getSellButton(),
-                    getLawButton(),
-                    getBossButton()
-                )
-            break;
-        case 'suit-law':
-            embed = getLawEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(),
-                    getSellButton(),
-                    getCashButton(),
-                    getBossButton()
-                )
-            break;
-        case 'suit-boss':
-            embed = getBossEmbed(LOCAL_TOON)
-            row = new ActionRowBuilder()
-                .addComponents(
-                    getHomeButton(),
-                    getSellButton(),
-                    getCashButton(),
-                    getLawButton()
-                )
-            break;
-        default:
-            return;
+
+    const [, actionWithState] = customId.split('-');
+    const [action, state] = actionWithState.split(':');
+
+    if (action === 'refresh') {
+        switch (state) {
+            case 'home':
+                embed = getHomeEmbed(LOCAL_TOON);
+                row = getHomeRow();
+                break;
+            case 'sell':
+                embed = getSellEmbed(LOCAL_TOON);
+                row = getSellRow();
+                break;
+            case 'cash':
+                embed = getCashEmbed(LOCAL_TOON);
+                row = getCashRow();
+                break;
+            case 'law':
+                embed = getLawEmbed(LOCAL_TOON);
+                row = getLawRow();
+                break;
+            case 'boss':
+                embed = getBossEmbed(LOCAL_TOON);
+                row = getBossRow();
+                break;
+            default:
+                return;
+        }
+    } else {
+        switch (customId) {
+            case 'suit-home':
+                embed = getHomeEmbed(LOCAL_TOON)
+                row = getHomeRow()
+                break;
+            case 'suit-sell':
+                embed = getSellEmbed(LOCAL_TOON)
+                row = getSellRow()
+                break;
+            case 'suit-cash':
+                embed = getCashEmbed(LOCAL_TOON)
+                row = getCashRow()
+                break;
+            case 'suit-law':
+                embed = getLawEmbed(LOCAL_TOON)
+                row = getLawRow()
+                break;
+            case 'suit-boss':
+                embed = getBossEmbed(LOCAL_TOON)
+                row = getBossRow()
+                break;
+            default:
+                return;
+        }
     }
 
     return { embed, row };
+}
+
+function getBossRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('boss'),
+            getHomeButton(),
+            getSellButton(),
+            getCashButton(),
+            getLawButton()
+        );
+}
+
+function getLawRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('law'),
+            getHomeButton(),
+            getSellButton(),
+            getCashButton(),
+            getBossButton()
+        );
+}
+
+function getCashRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('cash'),
+            getHomeButton(),
+            getSellButton(),
+            getLawButton(),
+            getBossButton()
+        );
+}
+
+function getSellRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('sell'),
+            getHomeButton(),
+            getCashButton(),
+            getLawButton(),
+            getBossButton()
+        );
+}
+
+function getHomeRow() {
+    return new ActionRowBuilder()
+        .addComponents(
+            getRefreshButton('home'),
+            getSellButton(),
+            getCashButton(),
+            getLawButton(),
+            getBossButton()
+        );
 }
 
 function getHomeEmbed(LOCAL_TOON) {
@@ -163,6 +219,13 @@ function getHomeButton() {
         .setCustomId('suit-home')
         .setLabel('Home')
         .setStyle('Primary')
+}
+
+function getRefreshButton(type) {
+    return new ButtonBuilder()
+        .setCustomId(`suit-refresh:${type}`)
+        .setLabel('Refresh')
+        .setStyle('Danger')
 }
 
 function getSellButton() {

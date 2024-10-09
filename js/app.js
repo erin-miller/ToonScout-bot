@@ -61,7 +61,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
 
         console.log(`USER [ ${user} ] CLICKED [ ${customId} ]`);
 
-        const cmd = app.commands.get(customId.split('-')[0]);
+        const cmd = app.commands.get(customId.split(/[-:]/)[0]);
 
         if (cmd && cmd.handleButton) {
             try {
