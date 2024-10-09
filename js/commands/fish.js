@@ -115,7 +115,7 @@ function getWhereEmbed(LOCAL_TOON) {
         .setTitle('Where should I go?')
         .setThumbnail(teleport)
         .setDescription(getFishInfo(LOCAL_TOON.fish, 'where'))
-        .setFooter({ text: 'The % rate reflects your chance of catching a new fish.', iconURL: bucket })
+        .setFooter(getFooter())
 }
 
 function getWhatEmbed(LOCAL_TOON) {
@@ -125,7 +125,11 @@ function getWhatEmbed(LOCAL_TOON) {
         .setTitle('What should I catch?')
         .setThumbnail(getRandomFish())
         .setDescription(getFishInfo(LOCAL_TOON.fish, 'what'))
-        .setFooter({ text: 'The % rate reflects your chance of catching a new fish.', iconURL: bucket })
+        .setFooter(getFooter())
+}
+
+function getFooter() {
+    return { text: 'Number of buckets is an estimate and is not guaranteed.', iconURL: bucket }
 }
 
 function getWhereButton() {
@@ -197,11 +201,11 @@ function getFishInfo(toon, type) {
 
     if (type === 'where') {
         topFive = fishcalc.sortBestLocation().slice(0,5);
-        topFive = topFive.map((place, index) => `${index+1}. ${place[0]}:  **${Math.round(place[1] * 100)}%**`).join('\n');
+        topFive = topFive.map((place, index) => `${index+1}. ${place[0]}:  **${(place[1] * 100).toFixed(2)}%**`).join('\n');
         return topFive;
     } else if (type === 'what') {
         topFive = fishcalc.sortBestRarity().slice(0,5);
-        topFive = topFive.map((fish, index) => `**${index+1}. ${fish.name} (${Math.round(fish.probability*100)}%)**Location: ${fish.location}\nBuckets: ${fish.buckets}\n`).join('\n');
+        topFive = topFive.map((fish, index) => `**${index+1}. ${fish.name} (${(fish.probability*100).toFixed(2)}%)**Location: ${fish.location}\nBuckets: ${fish.buckets}\n`).join('\n');
         return topFive;
     }
 }
