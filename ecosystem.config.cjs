@@ -3,8 +3,8 @@ module.exports = {
     {
       name: "ToonScout",
       script: "./js/app.js",
-      watch: true,
-      ignore_watch: ['users.db', '.git'],
+      watch: false,
+      ignore_watch: ['users.db', 'users.db-journal', '.git'],
       watch_options: {
         followSymlinks: false,
       },
