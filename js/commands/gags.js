@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
-import { LocalToonRequest, getToonRendition } from '../utils.js';
+import { getToonRendition } from '../utils.js';
 
 const HIGHEST_LVL = 7;
 const organic = '<:organic:1292659435717787791>';
@@ -77,15 +77,14 @@ export const data = new SlashCommandBuilder()
         .setIntegrationTypes(1)
         .setContexts([0, 1, 2])
 
-export async function execute(req, res) {
-    const LOCAL_TOON = await LocalToonRequest('info.json');
-    const gagTracks = getGagInfo(LOCAL_TOON);
-    const gagProgress = getGagProgress(LOCAL_TOON);
+export async function execute(req, res, toon) {
+    const gagTracks = getGagInfo(toon);
+    const gagProgress = getGagProgress(toon);
 
     const embed = new EmbedBuilder()
         .setColor('Purple')
-        .setAuthor({ name: LOCAL_TOON.toon.name, iconURL: getToonRendition(LOCAL_TOON, 'laffmeter') })
-        .setThumbnail(getToonRendition(LOCAL_TOON, 'cake-topper'))
+        .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
+        .setThumbnail(getToonRendition(toon, 'cake-topper'))
         .setDescription(`${gagTracks}`)
         .setFooter({ text: 'Leaf icon reflects an organic gag.', iconURL: organicLink })
 

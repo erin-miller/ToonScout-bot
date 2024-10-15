@@ -1,6 +1,6 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
-import { LocalToonRequest, getToonRendition } from '../utils.js';
+import { getToonRendition } from '../utils.js';
 
 export const data = new SlashCommandBuilder()
         .setName('info')
@@ -8,16 +8,14 @@ export const data = new SlashCommandBuilder()
         .setIntegrationTypes(1)
         .setContexts([0, 1, 2]);
 
-export async function execute(req, res) {
-    const LOCAL_TOON = await LocalToonRequest('info.json');
-
+export async function execute(req, res, toon) {
     const embed = new EmbedBuilder()
         .setColor('Greyple')
-        .setAuthor({ name: LOCAL_TOON.toon.name, iconURL: getToonRendition(LOCAL_TOON, 'laffmeter') })
-        .setThumbnail(getToonRendition(LOCAL_TOON, 'waving'))
+        .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
+        .setThumbnail(getToonRendition(toon, 'waving'))
         .addFields(
-            { name: 'Laff', value: simplifyLaff(LOCAL_TOON) },
-            { name: 'Location', value: simplifyLocation(LOCAL_TOON) }
+            { name: 'Laff', value: simplifyLaff(toon) },
+            { name: 'Location', value: simplifyLocation(toon) }
         )
 
     return res.send({

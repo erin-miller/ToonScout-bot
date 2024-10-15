@@ -5,7 +5,7 @@ import {
     ButtonBuilder 
 } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
-import { LocalToonRequest, getToonRendition } from '../utils.js';
+import { getToonRendition } from '../utils.js';
 import SuitCalculator from 'toonapi-calculator/js/suits.js';
 
 const gear = 'https://i.imgur.com/ezVOZkx.png';
@@ -20,8 +20,7 @@ export const data = new SlashCommandBuilder()
         .setIntegrationTypes(1)
         .setContexts([0, 1, 2])
 
-export async function execute(req, res) {
-    const LOCAL_TOON = await LocalToonRequest('all.json');
+export async function execute(req, res, toon) {
 
     const row = new ActionRowBuilder()
         .addComponents(
@@ -34,14 +33,13 @@ export async function execute(req, res) {
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            embeds: [getHomeEmbed(LOCAL_TOON)],
+            embeds: [getHomeEmbed(toon)],
             components: [row]
         }
     });
 }
 
-export async function handleButton(customId) {
-    const LOCAL_TOON = await LocalToonRequest('all.json');
+export async function handleButton(customId, toon) {
     let embed;
     let row;
 
@@ -51,23 +49,23 @@ export async function handleButton(customId) {
     if (action === 'refresh') {
         switch (state) {
             case 'home':
-                embed = getHomeEmbed(LOCAL_TOON);
+                embed = getHomeEmbed(toon);
                 row = getHomeRow();
                 break;
             case 'sell':
-                embed = getSellEmbed(LOCAL_TOON);
+                embed = getSellEmbed(toon);
                 row = getSellRow();
                 break;
             case 'cash':
-                embed = getCashEmbed(LOCAL_TOON);
+                embed = getCashEmbed(toon);
                 row = getCashRow();
                 break;
             case 'law':
-                embed = getLawEmbed(LOCAL_TOON);
+                embed = getLawEmbed(toon);
                 row = getLawRow();
                 break;
             case 'boss':
-                embed = getBossEmbed(LOCAL_TOON);
+                embed = getBossEmbed(toon);
                 row = getBossRow();
                 break;
             default:
@@ -76,23 +74,23 @@ export async function handleButton(customId) {
     } else {
         switch (customId) {
             case 'suit-home':
-                embed = getHomeEmbed(LOCAL_TOON)
+                embed = getHomeEmbed(toon)
                 row = getHomeRow()
                 break;
             case 'suit-sell':
-                embed = getSellEmbed(LOCAL_TOON)
+                embed = getSellEmbed(toon)
                 row = getSellRow()
                 break;
             case 'suit-cash':
-                embed = getCashEmbed(LOCAL_TOON)
+                embed = getCashEmbed(toon)
                 row = getCashRow()
                 break;
             case 'suit-law':
-                embed = getLawEmbed(LOCAL_TOON)
+                embed = getLawEmbed(toon)
                 row = getLawRow()
                 break;
             case 'suit-boss':
-                embed = getBossEmbed(LOCAL_TOON)
+                embed = getBossEmbed(toon)
                 row = getBossRow()
                 break;
             default:

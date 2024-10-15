@@ -4,6 +4,10 @@ module.exports = {
       name: "ToonScout",
       script: "./js/app.js",
       watch: true,
+      ignore_watch: ['users.db', '.git'],
+      watch_options: {
+        followSymlinks: false,
+      },
       env: {
         NODE_ENV: "production",
 	APP_ID: "1286517155315322950",

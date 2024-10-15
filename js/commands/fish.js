@@ -6,7 +6,7 @@ import {
 } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
 import FishCalculator from 'toonapi-calculator/js/fish.js';
-import { LocalToonRequest, getToonRendition } from '../utils.js';
+import { getToonRendition } from '../utils.js';
 
 const fisherman = 'https://static.toontownrewritten.wiki/uploads/e/eb/Crocodile_fishing.png';
 const bucket = 'https://i.imgur.com/jpy0keb.png';
@@ -35,9 +35,7 @@ export const data = new SlashCommandBuilder()
         .setIntegrationTypes(1)
         .setContexts([0, 1, 2])
 
-export async function execute(req, res) {
-    const LOCAL_TOON = await LocalToonRequest('all.json');
-    
+export async function execute(req, res, toon) {
     const row = new ActionRowBuilder()
         .addComponents(
             getWhatButton(),
@@ -47,14 +45,13 @@ export async function execute(req, res) {
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            embeds: [getHomeEmbed(LOCAL_TOON)],
+            embeds: [getHomeEmbed(toon)],
             components: [row]
         }
     });
 }
 
-export async function handleButton(customId) {
-    const LOCAL_TOON = await LocalToonRequest('all.json');
+export async function handleButton(customId, toon) {
     let embed;
     let row;
 
@@ -64,11 +61,11 @@ export async function handleButton(customId) {
     if (action === 'refresh') {
         switch (state) {
             case 'where':
-                embed = getWhereEmbed(LOCAL_TOON);
+                embed = getWhereEmbed(toon);
                 row = getWhereRow();
                 break;
             case 'what':
-                embed = getWhatEmbed(LOCAL_TOON);
+                embed = getWhatEmbed(toon);
                 row = getWhatRow();
                 break;
             default:
@@ -77,15 +74,15 @@ export async function handleButton(customId) {
     } else {
         switch (customId) {
             case 'fish-home':
-                embed = getHomeEmbed(LOCAL_TOON);
+                embed = getHomeEmbed(toon);
                 row = getHomeRow();
                 break;
             case 'fish-where':
-                embed = getWhereEmbed(LOCAL_TOON);
+                embed = getWhereEmbed(toon);
                 row = getWhereRow();
                 break;
             case 'fish-what':
-                embed = getWhatEmbed(LOCAL_TOON);
+                embed = getWhatEmbed(toon);
                 row = getWhatRow();
                 break;
             default:

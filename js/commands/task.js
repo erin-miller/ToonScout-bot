@@ -3,7 +3,7 @@ import {
     EmbedBuilder,
 } from 'discord.js';
 import { InteractionResponseType } from 'discord-interactions';
-import { LocalToonRequest, getToonRendition } from '../utils.js';
+import { getToonRendition } from '../utils.js';
 
 const trooper = 'https://i.imgur.com/eYjdODE.png';
 
@@ -13,13 +13,12 @@ export const data = new SlashCommandBuilder()
         .setIntegrationTypes(1)
         .setContexts([0, 1, 2])
 
-export async function execute(req, res) {
-    const LOCAL_TOON = await LocalToonRequest('info.json');
-    const tasks = getTasks(LOCAL_TOON);
+export async function execute(req, res, toon) {
+    const tasks = getTasks(toon);
     
     const embed = new EmbedBuilder()
         .setColor('Green')
-        .setAuthor({ name: LOCAL_TOON.toon.name, iconURL: getToonRendition(LOCAL_TOON, 'laffmeter') })
+        .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
         .setThumbnail(trooper)
 
     tasks.forEach(task => {

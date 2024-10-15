@@ -1,8 +1,6 @@
 import 'dotenv/config';
-
 const DEFAULT_PORT = 1547;
 const MAX_PORT = 1552;
-let authToken = null;
 
 export async function DiscordRequest(endpoint, options) {
     // append endpoint to root API URL
@@ -40,38 +38,6 @@ export async function InstallGlobalCommands(appId, commands) {
     }
 }
 
-export async function LocalToonRequest(request) {
-    let port = DEFAULT_PORT;
-    initAuthToken();
-    const endpoint = request;
-
-    const url = `http://localhost:${port}/${endpoint}`;
-
-    try {
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                Host: `localhost:${port}`,
-                'User-Agent': 'ToonScout',
-                Authorization: authToken,
-                'Connection': 'close',
-            },
-        });
-
-        if (response.ok) {
-            // parse as JSON
-            return await response.json();
-        } else {
-            const body = await response.text();
-            console.log(`Error on port ${port}: ${response.status} ${response.statusText}`, body);
-        }
-    } catch (error) {
-        console.log(`Error making request on port ${port}:`, error);
-    }
-
-    throw new Error('Failed to connect to API server on any port');
-}
-
 export function getUser(req) {
     const { user: direct, member } = req.body;
     return direct ? direct.username : member.user.username;
@@ -82,14 +48,12 @@ export function getGlobalUser(req) {
     return direct ? direct.global_name : member.user.username;
 }
 
+export function getUserId(req) {
+    const { user: direct, member } = req.body;
+    return direct ? direct.id : member.user.id;
+}
+
 export function getToonRendition(local_toon, pose) {
     const dna = local_toon.toon.style;
     return `https://rendition.toontownrewritten.com/render/${dna}/${pose}/1024x1024.png`
-}
-
-function initAuthToken() {
-    if (!authToken) {
-        authToken = Math.random().toString(36).substring(2);
-        console.log("New session token generated.");
-    }
 }
