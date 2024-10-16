@@ -4,7 +4,7 @@ module.exports = {
       name: "ToonScout",
       script: "./js/app.js",
       watch: false,
-      ignore_watch: ['users.db', 'users.db-journal', '.git'],
+      ignore_watch: ['.git'],
       watch_options: {
         followSymlinks: false,
       },
@@ -18,7 +18,7 @@ module.exports = {
     {
       name: "Ngrok",
       script: "ngrok",
-      args: "http 3000",
+      args: "http --url=kindly-ruling-tiger.ngrok-free.app 3000",
     },
   ],
 };

@@ -6,8 +6,6 @@ import { readdirSync } from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import cors from 'cors';
-import { Low } from 'lowdb';
-import { JSONFile } from 'lowdb/node'; // Adjusted import path
 
 // Create an express app
 const app = express();
@@ -133,7 +131,6 @@ const collectionName = 'users';
 async function connectToDatabase() {
     try {
         await client.connect();
-        console.log('Connected to the MongoDB database.');
         const database = client.db(dbName);
         return database.collection(collectionName);
     } catch (error) {
@@ -162,7 +159,7 @@ export async function getToken(userId) {
 
     try {
         const user = await collection.findOne({ userId: userId });
-        return user ? JSON.parse(user.data) : null; // Return parsed JSON data or null
+        return user ? JSON.parse(JSON.parse(user.data)).data : null;
     } catch (error) {
         console.error('Error retrieving token:', error.message);
     }
