@@ -99,7 +99,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
                 console.error(error);
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: { content: 'Button interaction error.' },
+                    data: { content: 'Button interaction error. Try again in a few moments.', ephemeral: true },
                 });
             }
         }
