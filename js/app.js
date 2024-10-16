@@ -1,11 +1,12 @@
 import 'dotenv/config';
 import express from 'express';
 import { InteractionType, InteractionResponseType, verifyKeyMiddleware } from 'discord-interactions';
-import { getUser, getUserId } from './utils.js';
+import { getUserId } from './utils.js';
 import { readdirSync } from 'fs';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import cors from 'cors';
+import WebSocket from 'ws';
 
 // Create an express app
 const app = express();
@@ -105,21 +106,36 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
     }
 });
 
-app.post('/toon', async (req, res) => {
-    const { userId, data } = req.body;
+const server = app.listen(PORT, () => {
+    console.log('Listening on port', PORT);
+  });
 
-    if (!userId || !data) {
-        return res.status(400).json({ error: 'User ID and data are required.' });
-    }
+const wss = new WebSocket.Server({ server });
 
-    try {
-        await storeToken(userId, JSON.stringify(data))
-        res.status(201).json({ message: 'Data saved successfully.' });
-    } catch (error) {
-        console.error('Error saving data:', error);
-        res.status(500).json({ error: 'Internal server error.' });
-    }
-});
+wss.on('connection', (ws) => {
+    console.log("Client connected.");
+
+    ws.on('message', async (message) => {
+        const { userId, data } = JSON.parse(message);
+
+        if (!userId || !data) {
+            ws.send(JSON.stringify({ error: 'User ID and data are required.' }));
+            return;
+        }
+
+        try {
+            await storeToken(userId, JSON.stringify(data));
+            ws.send(JSON.stringify({ message: 'Data saved successfully.' }));
+        } catch (error) {
+            console.error('Error saving data:', error);
+            ws.send(JSON.stringify({ error: 'Internal server error.' }));
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('Client disconnected');
+    });
+})
 
 import { MongoClient } from 'mongodb';
 
@@ -164,11 +180,6 @@ export async function getToken(userId) {
         console.error('Error retrieving token:', error.message);
     }
 }
-
-
-app.listen(PORT, () => {
-  console.log('Listening on port', PORT);
-});
 
 process.on('SIGINT', () => {
     console.log("Shutting down...");
