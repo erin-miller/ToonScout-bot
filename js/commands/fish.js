@@ -194,15 +194,17 @@ function getFishInfo(toon, type) {
 
     if (fishcalc.getNew().length == 0) {
         return `You have maxed fishing. Congratulations!`;
-    }
+	}    
 
     if (type === 'where') {
         topFive = fishcalc.sortBestLocation().slice(0,5);
-        topFive = topFive.map((place, index) => `${index+1}. ${place[0]}:  **${(place[1] * 100).toFixed(2)}%**`).join('\n');
+        topFive = topFive.map(([location, { total, buckets }], index) => {
+		return `${index+1}. **${location} (${(total * 100).toFixed(2)}%)**\nBuckets: ${buckets}\n`;
+    }).join('\n');
         return topFive;
     } else if (type === 'what') {
         topFive = fishcalc.sortBestRarity().slice(0,5);
         topFive = topFive.map((fish, index) => `**${index+1}. ${fish.name} (${(fish.probability*100).toFixed(2)}%)**Location: ${fish.location}\nBuckets: ${fish.buckets}\n`).join('\n');
-        return topFive;
+  	return topFive;
     }
 }
