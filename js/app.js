@@ -123,53 +123,51 @@ app.post('/toon', async (req, res) => {
     }
 });
 
-import sqlite3 from 'sqlite3';
+import { MongoClient } from 'mongodb';
 
-// Connect to the SQLite database (creates it if it doesn't exist)
-const db = new sqlite3.Database('users.db', (err) => {
-    if (err) {
-        console.error('Error opening database:', err.message);
-    } else {
-        console.log('Connected to the SQLite database.');
+const uri = 'mongodb://localhost:27017';
+const client = new MongoClient(uri);
+const dbName = 'scoutData';
+const collectionName = 'users';
 
-        // Create users table if it doesn't exist
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            userId TEXT PRIMARY KEY,
-            data TEXT
-        )`, (err) => {
-            if (err) {
-                console.error('Error creating table:', err.message);
-            }
-        });
+async function connectToDatabase() {
+    try {
+        await client.connect();
+        console.log('Connected to the MongoDB database.');
+        const database = client.db(dbName);
+        return database.collection(collectionName);
+    } catch (error) {
+        console.error('Error connecting to MongoDB:', error.message);
     }
-});
+}
 
 export async function storeToken(userId, data) {
-    const jsonData = JSON.stringify(data); // Convert data to JSON string
+    const jsonData = JSON.stringify(data);
+    const collection = await connectToDatabase();
 
-    return new Promise((resolve, reject) => {
-        db.run(`INSERT OR REPLACE INTO users (userId, data) VALUES (?, ?)`, [userId, jsonData], function(err) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(this.changes); // Returns the number of rows changed
-            }
-        });
-    });
+    try {
+        const result = await collection.updateOne(
+            { userId: userId },
+            { $set: { data: jsonData } },
+            { upsert: true }
+        );
+        return result.modifiedCount;
+    } catch (error) {
+        console.error('Error storing token:', error.message);
+    }
 }
 
 export async function getToken(userId) {
-    return new Promise((resolve, reject) => {
-        db.get(`SELECT data FROM users WHERE userId = ?`, [userId], (err, row) => {
-            if (err) {
-                reject(err);
-            } else {
-                const dataString = JSON.parse(row.data); // Extracting the JSON string
-                resolve(row ? JSON.parse(dataString).data : null); // Return parsed JSON data or null
-            }
-        });
-    });
+    const collection = await connectToDatabase();
+
+    try {
+        const user = await collection.findOne({ userId: userId });
+        return user ? JSON.parse(user.data) : null; // Return parsed JSON data or null
+    } catch (error) {
+        console.error('Error retrieving token:', error.message);
+    }
 }
+
 
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
