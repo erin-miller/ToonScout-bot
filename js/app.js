@@ -72,7 +72,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
             console.error(error);
             return res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: { content: 'There was an error while executing this command!', ephemeral: true }
+                data: { content: 'There was an error while executing this command!', flags: 64 }
             });
         }            
     }
@@ -99,7 +99,7 @@ app.post('/interactions', verifyKeyMiddleware(process.env.PUBLIC_KEY), async fun
                 console.error(error);
                 return res.send({
                     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                    data: { content: 'Button interaction error. Try again in a few moments.', ephemeral: true },
+                    data: { content: 'Button interaction error. Try again in a few moments.', flags: 64 },
                 });
             }
         }
