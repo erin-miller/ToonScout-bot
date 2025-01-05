@@ -13,7 +13,7 @@ import { storeCookieToken, getCookieToken } from './db/tokenData/tokenService.js
 import { FishCalculator, SuitsCalculator } from 'toonapi-calculator';
 
 const app = express();
-const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', "https://scoutsite-test.vercel.app/"];
+const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', "https://scoutsite-test.vercel.app"];
 
 app.use(cors({
     origin: (origin, callback) => {
@@ -28,6 +28,13 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add any methods you expect to use
     credentials: true, // Include cookies or authorization headers
 }));
+
+app.options('*', (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*'); // Make sure the proper CORS headers are set
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.sendStatus(200);
+});
 
 // app.use(cors({
 //     origin: '*', // Allow all origins
@@ -232,7 +239,6 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', (ws) => {
     ws.on('message', async (message) => {
         const { userId, data } = JSON.parse(message);
-        
 	if (!userId || !data) {
             ws.send(JSON.stringify({ error: 'User ID and data are required.' }));
             return;
