@@ -186,7 +186,7 @@ app.post('/get-fish', async (req, res) => {
         return res.status(400).json({ message: 'Toon data is required' });
     }
 
-    const calc = new FishCalculator(JSON.stringify(toonData.fish));
+    const calc = new FishCalculator(JSON.stringify(toonData.data.fish));
 
     try {
         const fishData = calc.sortBestRarity();
@@ -209,7 +209,7 @@ app.post('/get-promo', async (req, res) => {
         return res.status(400).json({ message: 'Toon data and dept is required' });
     }
 
-    const calc = new SuitsCalculator(JSON.stringify(toonData.cogsuits));
+    const calc = new SuitsCalculator(JSON.stringify(toonData.data.cogsuits));
     
     try {
         const promoData = calc.getBestPathWeighted(dept);
