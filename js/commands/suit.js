@@ -259,6 +259,16 @@ function getSuitEmbed(item, title, type) {
     const toon = item.data;
     const suit = toon.cogsuits;
     if (suit[type].hasDisguise) {
+        if (suit[type].level == 50) {
+            return new EmbedBuilder()
+                .setColor('Red')
+                .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
+                .setTitle(getBasicSuitInfo(suit, type))
+                .setDescription(`Maxed!`)
+                .addFields("Congratulations! You have maxed this cog suit.")
+                .setFooter({ text: `Facility earnings are an estimate.`, iconURL: gear })
+                .setTimestamp(item.modified)
+        }
         return new EmbedBuilder()
             .setColor('Red')
             .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
