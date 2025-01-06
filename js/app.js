@@ -13,7 +13,7 @@ import { storeCookieToken, getCookieToken } from './db/tokenData/tokenService.js
 import { FishCalculator, SuitsCalculator } from 'toonapi-calculator';
 
 const app = express();
-const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', 'http://localhost:3000', 'https://scoutsite-test.vercel.app', "https://scoutsite-test.vercel.app"];
+const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', "https://scoutsite-test.vercel.app"];
 
 app.use(cors({
     origin: (origin, callback) => {
