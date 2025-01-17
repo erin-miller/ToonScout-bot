@@ -265,7 +265,6 @@ function getSuitEmbed(item, title, type) {
                 .setAuthor({ name: toon.toon.name, iconURL: getToonRendition(toon, 'laffmeter') })
                 .setTitle(getBasicSuitInfo(suit, type))
                 .setDescription(`Maxed!`)
-                .addFields("Congratulations! You have maxed this cog suit.")
                 .setFooter({ text: `Facility earnings are an estimate.`, iconURL: gear })
                 .setTimestamp(item.modified)
         }
