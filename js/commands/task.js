@@ -46,7 +46,7 @@ export async function execute(req, res, target) {
 function getTasks(toon) {
     const toontasks = toon.tasks;
     if (toontasks.length == 0) {
-        return { name: '', value: 'This toon has no tasks right now!'};
+        return { name: 'Oops!', value: 'This toon has no tasks right now!'};
     }    
     let taskList = []
     for (const task of toontasks) {

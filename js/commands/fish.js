@@ -13,21 +13,23 @@ const fisherman = 'https://static.toontownrewritten.wiki/uploads/e/eb/Crocodile_
 const bucket = 'https://i.imgur.com/jpy0keb.png';
 const teleport = 'https://i.imgur.com/DtJjCcH.png';
 const fish = [
-    'https://i.imgur.com/4XkjqzJ.png',
-    'https://i.imgur.com/EiedLlg.png',
-    'https://i.imgur.com/NHPl4Y9.png',
-    'https://i.imgur.com/RnmDLY2.png',
-    'https://i.imgur.com/a56BVTE.png',
-    'https://i.imgur.com/k5Xc46Z.png',
-    'https://i.imgur.com/UusWLZn.png',
-    'https://i.imgur.com/QkVyni1.png',
-    'https://i.imgur.com/JeaexHO.png',
-    'https://i.imgur.com/ATQp9jz.png',
-    'https://i.imgur.com/4Pz49Hc.png',
-    'https://i.imgur.com/P93jQf5.png',
-    'https://i.imgur.com/AHefykm.png',
-    'https://i.imgur.com/cMBgGLz.png',
-    'https://i.imgur.com/ETCwwNU.png',
+	"https://scouttoon.info/fish/amoreeel.png",
+	"https://scouttoon.info/fish/balloonfish.png",
+	"https://scouttoon.info/fish/bearacuda.png",
+	"https://scouttoon.info/fish/catfish.png",
+	"https://scouttoon.info/fish/clownfish.png",
+	"https://scouttoon.info/fish/cuttthroat.png",
+	"https://scouttoon.info/fish/devilray.png",
+	"https://scouttoon.info/fish/dog.png",
+	"https://scouttoon.info/fish/frozenfish.png",
+	"https://scouttoon.info/fish/jellyfish.png",
+	"https://scouttoon.info/fish/kingcrab.png",
+	"https://scouttoon.info/fish/moonfish.png",
+	"https://scouttoon.info/fish/nurseshark.png",
+	"https://scouttoon.info/fish/pianofish.png",
+	"https://scouttoon.info/fish/poolshark.png",
+	"https://scouttoon.info/fish/seahorse.png",
+	"https://scouttoon.info/fish/starfish.png",
 ]
 let footer = '';
 
