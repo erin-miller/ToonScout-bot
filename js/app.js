@@ -13,27 +13,33 @@ import { storeCookieToken, getCookieToken } from './db/tokenData/tokenService.js
 import { FishCalculator, SuitsCalculator } from 'toonapi-calculator';
 
 const app = express();
-const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', "https://scoutsite-test.vercel.app"];
+const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', 'https://staging.scouttoon.info'];
 
 app.use(cors({
     origin: (origin, callback) => {
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+	if (allowedOrigins.includes(origin)) {
+            return callback(null,true);
+	} else {
+            const msg = 'The CORS policy does not allow access from this origin.';
             return callback(new Error(msg), false);
         }
-        return callback(null, true);
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add any methods you expect to use
     credentials: true, // Include cookies or authorization headers
 }));
 
 app.options(/(.*)/, (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Make sure the proper CORS headers are set
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.sendStatus(200);
+    const origin = req.get('Origin');
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin); // Make sure the proper CORS headers are set
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    return res.sendStatus(200);
+    }
+
+    res.sendStatus(403);
 });
 
 // app.use(cors({
