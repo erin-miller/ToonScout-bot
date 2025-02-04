@@ -42,12 +42,6 @@ app.options(/(.*)/, (req, res) => {
     res.sendStatus(403);
 });
 
-// app.use(cors({
-//     origin: '*', // Allow all origins
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add methods you expect to use
-//     credentials: true, // Include cookies or authorization headers if needed
-// }));
-
 // parse req as JSON
 app.use(express.json())
 
