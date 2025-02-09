@@ -31,9 +31,13 @@ export async function execute(req, res, target) {
         .setThumbnail(trooper)
         .setTimestamp(item.modified)
 
-    tasks.forEach(task => {
-        embed.addFields(task);
-    })
+    if (tasks.length > 0) {
+        tasks.forEach(task => {
+            embed.addFields(task);
+        })
+    } else {
+        embed.addFields({ name: 'Oops!', value: 'This toon has no tasks right now!'})
+    }
 
     return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -46,7 +50,7 @@ export async function execute(req, res, target) {
 function getTasks(toon) {
     const toontasks = toon.tasks;
     if (toontasks.length == 0) {
-        return { name: 'Oops!', value: 'This toon has no tasks right now!'};
+        return [];
     }    
     let taskList = []
     for (const task of toontasks) {

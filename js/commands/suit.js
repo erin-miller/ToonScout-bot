@@ -53,11 +53,11 @@ const levels = {
 };
 
 
-const gear = 'https://i.imgur.com/ezVOZkx.png';
-const sellIcon = 'https://i.imgur.com/gGr9Mqp.png';
-const cashIcon = 'https://i.imgur.com/Wo4aeDt.png';
-const lawIcon = 'https://i.imgur.com/mYUrd1D.png';
-const bossIcon = 'https://i.imgur.com/QrV9Zrx.png';
+const gear = 'https://scouttoon.info/images/coggear.png';
+const sellIcon = 'https://scouttoon.info/images/emblem_sell.png';
+const cashIcon = 'https://scouttoon.info/images/emblem_cash.png';
+const lawIcon = 'https://scouttoon.info/images/emblem_law.png';
+const bossIcon = 'https://scouttoon.info/images/emblem_boss.png';
 
 export const data = new SlashCommandBuilder()
         .setName('suit')

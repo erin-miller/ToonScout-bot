@@ -11,7 +11,7 @@ import { getScoutToken } from '../db/scoutData/scoutService.js';
 
 const fisherman = 'https://static.toontownrewritten.wiki/uploads/e/eb/Crocodile_fishing.png';
 const bucket = 'https://i.imgur.com/jpy0keb.png';
-const teleport = 'https://i.imgur.com/DtJjCcH.png';
+const teleport = 'https://scouttoon.info/images/teleport.png';
 const fish = [
 	"https://scouttoon.info/fish/amoreeel.png",
 	"https://scouttoon.info/fish/balloonfish.png",
@@ -156,7 +156,7 @@ function getWhatEmbed(item) {
 }
 
 function getFooter(toon) {
-    return { text: `Number of buckets is an estimate.\n${getFishCount(toon.fish)}`, iconURL: bucket }
+    return { text: `You are 90% likely to catch in\nthe number of confident buckets.\n${getFishCount(toon.fish)}`, iconURL: bucket }
 }
 
 function getFishCount(toon) {
@@ -229,17 +229,37 @@ function getFishInfo(toon, type) {
     const fishcalc = new FishCalculator(JSON.stringify(toon));
     let topFive;
 
-    if (fishcalc.getNew().length == 0) {
+    if (fishcalc.getNew().length === 0) {
         return `You have maxed fishing. Congratulations!`;
-	}    
+    }
 
     if (type === 'where') {
-        topFive = fishcalc.sortBestLocation().slice(0,5);
-	    topFive = topFive.map(([location, { total, buckets }], index) =>`**${index + 1}. ${location} (${(total*100).toFixed(2)}%)**Buckets: ${buckets}\n`).join('\n');
-        return topFive;
-    } else if (type === 'what') {
-        topFive = fishcalc.sortBestRarity().slice(0,5);
-        topFive = topFive.map((fish, index) => `**${index+1}. ${fish.name} (${(fish.probability*100).toFixed(2)}%)**Location: ${fish.location}\nBuckets: ${fish.buckets}\n`).join('\n');
-  	return topFive;
+        topFive = fishcalc.sortBestLocation()
+            .filter(([_, { total, buckets: { confBuckets } }]) => total > 0 && confBuckets > 0) // Skip 0 values
+            .slice(0, 5)
+            .map(([location, { total, buckets: { confBuckets, avgBuckets } }], index) => 
+                `**${index + 1}. ${location} (${(total * 100).toFixed(2)}%)**` +
+                `Confident Buckets: ${confBuckets}` +
+                `Average Buckets: ${avgBuckets}`
+            )
+            .join('\n\n'); // Single line space between entries
+
+        return topFive || "No suitable fishing locations found.";
+    } 
+    
+    if (type === 'what') {
+        topFive = fishcalc.sortBestRarity()
+            .filter(fish => fish.probability > 0 && fish.buckets.confBuckets > 0) // Skip 0 values
+            .slice(0, 5)
+            .map((fish, index) => 
+                `**${index + 1}. ${fish.name} (${(fish.probability * 100).toFixed(2)}%)**` +
+                `Location: ${fish.location}\n` +
+                `Confident Buckets: ${fish.buckets.confBuckets}\n` +
+                `Average Buckets: ${fish.buckets.avgBuckets}`
+            )
+            .join('\n\n'); // Single line space between entries
+
+        return topFive || "No suitable fish available.";
     }
 }
+

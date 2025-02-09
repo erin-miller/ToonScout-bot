@@ -16,8 +16,6 @@ const itos = {
     6: 'Six',
     7: 'Seven',
     8: 'Eight',
-    9: 'Nine',
-    10: 'Ten'
 };
 
 const FLOWER_INDEX = {
@@ -40,7 +38,7 @@ export const data = new SlashCommandBuilder()
         .setContexts([0, 1, 2])
         .addIntegerOption(option => 
             option.setName('combo')
-                .setDescription('(1-9) What number jellybean combination are you looking for?')
+                .setDescription('(1-8) What number jellybean combination are you looking for?')
                 .setRequired(true)
                 .setMinValue(1)
                 .setMaxValue(8)

@@ -24,7 +24,7 @@
         "express": "^5.0.1",
         "mongodb": "^6.9.0",
         "mongoose": "^8.7.3",
-        "toonapi-calculator": "^1.8.7",
+        "toonapi-calculator": "^2.1.0",
         "toonscout": "file:",
         "ws": "^8.18.0"
     },

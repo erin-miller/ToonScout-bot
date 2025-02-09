@@ -11,7 +11,7 @@ import { RacingCalculator } from 'toonapi-calculator';
 
 const trophyEmoji = "<:trophy:1301971567575699498>";
 
-const car = 'https://i.imgur.com/oOEXNMv.png';
+const car = 'https://scouttoon.info/images/racing_tickets.png';
 const trophyIcon = 'https://i.imgur.com/Sl1ep8e.png';
 const order = [
     "Speedway Wins",
