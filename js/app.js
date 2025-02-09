@@ -10,7 +10,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { getUserId, validateUser } from './utils.js';
 import { storeScoutToken } from './db/scoutData/scoutService.js';
 import { storeCookieToken, getCookieToken } from './db/tokenData/tokenService.js';
-import { FishCalculator, SuitsCalculator } from 'toonapi-calculator';
+import { FishCalculator, SuitsCalculator, FlowerCalculator } from 'toonapi-calculator';
 
 const app = express();
 const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', 'https://staging.scouttoon.info'];
@@ -189,7 +189,9 @@ app.post('/get-fish', async (req, res) => {
     const calc = new FishCalculator(JSON.stringify(toonData.data.fish));
 
     try {
-        const fishData = calc.sortBestRarity();
+        const rarity = calc.sortBestRarity();
+        const caught = calc.getCaught();
+        const fishData = { rarity, caught };
         
         if (fishData) {
             return res.status(200).json(fishData);
@@ -225,6 +227,28 @@ app.post('/get-promo', async (req, res) => {
     }
 });
 
+app.post('/get-garden', async (req, res) => {
+    const { toonData } = req.body;
+
+    const calc = new FlowerCalculator(JSON.stringify(toonData.data.flowers));
+
+    try {
+        const upgrade = calc.getDaysToUpgrade();
+        const plantable = calc.getPlantableFlowers();
+        const progress = calc.getProgressFlowers();
+        const missing = calc.getMissingFlowers();
+        const flowers = { upgrade, plantable, progress, missing }
+
+        if (flowerData) {
+            return res.status(200).json(flowers);
+        } else {
+            return res.status(404).json({ message: 'Flower data not found for this toon' });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+});
 
 app.use(express.json());
 /**
