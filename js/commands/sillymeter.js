@@ -35,9 +35,11 @@ export async function execute(req, res, target) {
         } else if (status === 'Reward') {
             title += `ACTIVE: ${meter.winner}`;
             
+	    const totalPoints = meter.rewardPoints.reduce((acc, points) => acc + points, 0);
+
             const rewardPercentages = meter.rewardPoints.map(points => {
-                if (hp === 0) return 0;
-                return (points / hp) * 100;
+                if (totalPoints === 0) return 0;
+                return Math.round((points / totalPoints) * 100);
             });
             
             let teams = ``;
