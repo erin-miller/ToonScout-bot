@@ -239,7 +239,7 @@ function getFishInfo(toon, type) {
             .slice(0, 5)
             .map(([location, { total, buckets: { confBuckets, avgBuckets } }], index) => 
                 `**${index + 1}. ${location} (${(total * 100).toFixed(2)}%)**` +
-                `Confident Buckets: ${confBuckets}` +
+                `Confident Buckets: ${confBuckets}\n` +
                 `Average Buckets: ${avgBuckets}`
             )
             .join('\n\n'); // Single line space between entries
