@@ -26,8 +26,8 @@ export async function getScoutToken(userId) {
     try {
         const user = await collection.findOne({ userId: userId });
         if (user) {
-	    const modified = new Date(user.modified);
-        const hidden = user.hidden === undefined ? true : user.hidden;
+            const modified = new Date(user.modified);
+            const hidden = user.hidden === undefined ? true : user.hidden;
             return { data: JSON.parse(user.data).data, modified: modified, hidden: hidden }
 	    }
         return null;
