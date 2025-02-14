@@ -11,7 +11,7 @@ export async function storeScoutToken(userId, data) {
         $set: { data: cleaned, modified: new Date() },
         $setOnInsert: { hidden: true },
       },
-      { upsert: true }
+      { upsert: true },
     );
     return result.modifiedCount;
   } catch (error) {
@@ -49,7 +49,7 @@ export async function updateHidden(userId) {
       const status = user.hidden === undefined ? false : !user.hidden;
       await collection.updateOne(
         { userId: userId },
-        { $set: { hidden: status } }
+        { $set: { hidden: status } },
       );
       return status;
     }

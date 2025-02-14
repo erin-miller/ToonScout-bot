@@ -126,7 +126,7 @@ export async function loadCommands(app) {
 
   const commandsPath = path.resolve(__dirname, "commands");
   const commandFiles = readdirSync(commandsPath).filter((file) =>
-    file.endsWith(".js")
+    file.endsWith(".js"),
   );
 
   for (const file of commandFiles) {
@@ -137,7 +137,7 @@ export async function loadCommands(app) {
       app.commands.set(command.data.name, command);
     } else {
       console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
       );
     }
   }
