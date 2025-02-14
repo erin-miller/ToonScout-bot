@@ -21,8 +21,4 @@ export function handleWebSocketConnection(ws) {
             ws.send(JSON.stringify({ error: 'Internal server error.' }));
         }
     });
-
-    ws.on('close', () => {
-        console.log('Client disconnected');
-    });
 }
