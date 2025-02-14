@@ -1,6 +1,6 @@
 import express from 'express';
 import { verifyKeyMiddleware, InteractionType, InteractionResponseType } from 'discord-interactions';
-import { getUserId, validateUser } from '../utils/discord.js';
+import { getUserId, validateUser } from '../utils.js';
 
 const router = express.Router();
 const PUBLIC_KEY = process.env.NODE_ENV === 'production' ? process.env.PUBLIC_KEY_PROD : process.env.PUBLIC_KEY_DEV;

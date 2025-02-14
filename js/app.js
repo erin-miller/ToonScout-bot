@@ -8,12 +8,17 @@ import interactionsRouter from './routes/interactions.js';
 import tokenRouter from './routes/token.js';
 import utilityRouter from './routes/utility.js';
 import { handleWebSocketConnection } from './websocket.js';
+import { loadCommands } from './utils.js';
 
 const app = express();
 const server = createServer(app);
 const wss = new WebSocketServer({ server });
 
 const PORT = process.env.PORT || 3000;
+
+app.commands = new Map();
+
+loadCommands(app);
 
 app.use(corsMiddleware);
 app.use(express.json());
