@@ -393,3 +393,4 @@ wrapper/
 # other
 *.sh
 .vs
+/test
