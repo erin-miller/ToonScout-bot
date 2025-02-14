@@ -394,3 +394,4 @@ wrapper/
 *.sh
 .vs
 /test
+ecosystem.config.cjs
