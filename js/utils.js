@@ -1,9 +1,9 @@
 import "dotenv/config";
 import { getScoutToken } from "./db/scoutData/scoutService.js";
 import { InteractionResponseType } from "discord-interactions";
-import { fileURLToPath, pathToFileURL } from 'url';
-import { readdirSync } from 'fs';
-import path from 'path';
+import { fileURLToPath, pathToFileURL } from "url";
+import { readdirSync } from "fs";
+import path from "path";
 
 export async function DiscordRequest(endpoint, options) {
   const isProduction = process.env.NODE_ENV === "production";
@@ -64,11 +64,12 @@ export function getToonRendition(local_toon, pose) {
   return `https://rendition.toontownrewritten.com/render/${dna}/${pose}/1024x1024.png`;
 }
 
-export async function validateUser(targetUser, res) {
+export async function validateUser(targetUser, req, res) {
   if (targetUser) {
     const targetToon = await getScoutToken(targetUser);
+    const requestingUserId = getUserId(req);
 
-    if (!targetToon || targetToon.hidden) {
+    if (!targetToon || (targetToon.hidden && targetUser !== requestingUserId)) {
       await res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {

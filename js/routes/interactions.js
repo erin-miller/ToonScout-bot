@@ -13,7 +13,7 @@ router.post('/', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     }
 
     const targetUser = req.body.data.options?.find(option => option.name === 'user')?.value;
-    const targetToon = await validateUser(targetUser, res);
+    const targetToon = await validateUser(targetUser, req, res);
     if (!targetToon && targetUser) {
         return;
     }
