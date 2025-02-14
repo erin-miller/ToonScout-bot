@@ -12,7 +12,7 @@ router.post('/store-token', async (req, res) => {
             secure: true,
             expires: new Date(Date.now() + (expiresAt * 1000)),
             sameSite: 'Strict',
-            domain: '.scouttoon.info',
+            domain: process.env.COOKIE_DOMAIN,
         });
 
         res.status(200).json({ message: 'Token stored successfully', modifiedCount });

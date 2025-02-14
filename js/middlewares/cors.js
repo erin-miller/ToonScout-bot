@@ -1,6 +1,6 @@
 import cors from 'cors';
 
-const allowedOrigins = ['https://scouttoon.info', 'https://api.scouttoon.info', 'https://staging.scouttoon.info'];
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
 
 const corsMiddleware = cors({
     origin: (origin, callback) => {

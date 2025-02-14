@@ -10,10 +10,10 @@ const __dirname = path.dirname(__filename);
 const commands = [];
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-// Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
+
 for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
-    const fileUrl = pathToFileURL(filePath); // Convert to a file URL
+    const fileUrl = pathToFileURL(filePath);
     const command = await import(fileUrl);
     if ('data' in command && 'execute' in command) {
         commands.push(command.data.toJSON());

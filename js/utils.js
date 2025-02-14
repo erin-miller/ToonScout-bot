@@ -6,7 +6,7 @@ export async function DiscordRequest(endpoint, options) {
     const isProduction = process.env.NODE_ENV === 'production';
     const DISCORD_TOKEN = isProduction ? process.env.DISCORD_TOKEN_PROD : process.env.DISCORD_TOKEN_DEV;
     // append endpoint to root API URL
-    const url = 'https://discord.com/api/v10/' + endpoint;
+    const url = process.env.DISCORD_API_URL + endpoint;
     // Stringify payloads
     if (options.body) options.body = JSON.stringify(options.body);
     const res = await fetch(url, {
@@ -14,7 +14,7 @@ export async function DiscordRequest(endpoint, options) {
         Authorization: `Bot ${DISCORD_TOKEN}`,
         'Content-Type': 'application/json; charset=UTF-8',
         'User-Agent':
-            'ToonScout (https://github.com/erin-miller/toonScout, 1.0.0)',
+            'ToonScout (https://github.com/erin-miller/ToonScout-bot)',
         },
         ...options,
     });
