@@ -4,6 +4,7 @@ import {
   SuitsCalculator,
   FlowerCalculator,
 } from "toonapi-calculator";
+import fetch from "node-fetch";
 
 const router = express.Router();
 
@@ -86,6 +87,37 @@ router.post("/get-garden", async (req, res) => {
     return res
       .status(500)
       .json({ message: "Internal server error", error: error.message });
+  }
+});
+
+// In-memory cache for invasions
+let cachedInvasions = null;
+let lastFetchTime = 0;
+const INVASION_CACHE_MS = 60 * 1000; // 60 seconds
+
+// Proxy TTR invasions API with in-memory caching and CORS
+router.get("/get-invasions", async (req, res) => {
+  res.set("Cache-Control", "public, max-age=60"); // Allow clients/proxies to cache for 60 seconds
+  const now = Date.now();
+  if (cachedInvasions && now - lastFetchTime < INVASION_CACHE_MS) {
+    return res.status(200).json(cachedInvasions);
+  }
+  try {
+    const response = await fetch(
+      "https://www.toontownrewritten.com/api/invasions",
+      {
+        headers: { "User-Agent": process.env.USER_AGENT },
+      }
+    );
+    if (!response.ok) {
+      return res.status(502).json({ error: "Failed to fetch from TTR API" });
+    }
+    const data = await response.json();
+    cachedInvasions = data;
+    lastFetchTime = now;
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
 

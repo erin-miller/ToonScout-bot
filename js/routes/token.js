@@ -12,14 +12,17 @@ router.post("/store-token", async (req, res) => {
     const modifiedCount = await storeCookieToken(
       userId,
       accessToken,
-      expiresAt,
+      expiresAt
     );
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production" ? true : false,
       expires: new Date(Date.now() + expiresAt * 1000),
-      sameSite: "Strict",
-      domain: process.env.COOKIE_DOMAIN,
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "None",
+      domain:
+        process.env.NODE_ENV === "production"
+          ? process.env.COOKIE_DOMAIN
+          : undefined,
     });
 
     res
