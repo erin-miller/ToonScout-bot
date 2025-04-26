@@ -95,6 +95,21 @@ let cachedInvasions = null;
 let lastFetchTime = 0;
 const INVASION_CACHE_MS = 60 * 1000; // 60 seconds
 
+/**
+ * @typedef {Object} InvasionDetails
+ * @property {number} asOf - Timestamp when invasion info was updated
+ * @property {string} type - The cog type (e.g., "Ambulance Chaser", "Bottom Feeder")
+ * @property {string} progress - Current invasion progress as "current/total" (e.g., "1498/3000")
+ * @property {number} startTimestamp - Unix timestamp when the invasion started
+ */
+
+/**
+ * @typedef {Object} TTRInvasionResponse
+ * @property {null|string} error - Error message if any, null if successful
+ * @property {Object.<string, InvasionDetails>} invasions - Map of district names to invasion details
+ * @property {number} lastUpdated - Unix timestamp of when the data was last updated
+ */
+
 // Proxy TTR invasions API with in-memory caching and CORS
 router.get("/get-invasions", async (req, res) => {
   res.set("Cache-Control", "public, max-age=60"); // Allow clients/proxies to cache for 60 seconds
@@ -119,6 +134,50 @@ router.get("/get-invasions", async (req, res) => {
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
+});
+
+// Test endpoint to return invasion data with a Legal Eagle invasion for local testing
+router.get("/test-invasions", async (req, res) => {
+  // Create a mock invasion response with the same structure as TTR API
+  const mockResponse = {
+    error: null,
+    invasions: {
+      "Hiccup Hills": {
+        asOf: Math.floor(Date.now() / 1000),
+        type: "Bottom Feeder",
+        progress: "1498/3000",
+        startTimestamp: Math.floor(Date.now() / 1000) - 1200, // Started 20 minutes ago
+      },
+      "Kaboom Cliffs": {
+        asOf: Math.floor(Date.now() / 1000),
+        type: "Ambulance Chaser",
+        progress: "2429/8084",
+        startTimestamp: Math.floor(Date.now() / 1000) - 1800, // Started 30 minutes ago
+      },
+      Splatville: {
+        asOf: Math.floor(Date.now() / 1000),
+        type: "Short Change",
+        progress: "4371/6000",
+        startTimestamp: Math.floor(Date.now() / 1000) - 3400, // Started ~56 minutes ago
+      },
+      "Zoink Falls": {
+        asOf: Math.floor(Date.now() / 1000),
+        type: "Robber Baron",
+        progress: "5352/7686",
+        startTimestamp: Math.floor(Date.now() / 1000) - 4500, // Started ~75 minutes ago
+      },
+      // Adding the requested Legal Eagle invasion for testing
+      "Toon Valley": {
+        asOf: Math.floor(Date.now() / 1000),
+        type: "Legal Eagle",
+        progress: "3245/9000",
+        startTimestamp: Math.floor(Date.now() / 1000) - 2700, // Started 45 minutes ago
+      },
+    },
+    lastUpdated: Math.floor(Date.now() / 1000),
+  };
+
+  return res.status(200).json(mockResponse);
 });
 
 export default router;
