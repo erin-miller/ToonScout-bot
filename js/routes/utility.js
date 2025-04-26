@@ -136,48 +136,4 @@ router.get("/get-invasions", async (req, res) => {
   }
 });
 
-// Test endpoint to return invasion data with a Legal Eagle invasion for local testing
-router.get("/test-invasions", async (req, res) => {
-  // Create a mock invasion response with the same structure as TTR API
-  const mockResponse = {
-    error: null,
-    invasions: {
-      "Hiccup Hills": {
-        asOf: Math.floor(Date.now() / 1000),
-        type: "Bottom Feeder",
-        progress: "1498/3000",
-        startTimestamp: Math.floor(Date.now() / 1000) - 1200, // Started 20 minutes ago
-      },
-      "Kaboom Cliffs": {
-        asOf: Math.floor(Date.now() / 1000),
-        type: "Ambulance Chaser",
-        progress: "2429/8084",
-        startTimestamp: Math.floor(Date.now() / 1000) - 1800, // Started 30 minutes ago
-      },
-      Splatville: {
-        asOf: Math.floor(Date.now() / 1000),
-        type: "Short Change",
-        progress: "4371/6000",
-        startTimestamp: Math.floor(Date.now() / 1000) - 3400, // Started ~56 minutes ago
-      },
-      "Zoink Falls": {
-        asOf: Math.floor(Date.now() / 1000),
-        type: "Robber Baron",
-        progress: "5352/7686",
-        startTimestamp: Math.floor(Date.now() / 1000) - 4500, // Started ~75 minutes ago
-      },
-      // Adding the requested Legal Eagle invasion for testing
-      "Toon Valley": {
-        asOf: Math.floor(Date.now() / 1000),
-        type: "Legal Eagle",
-        progress: "3245/9000",
-        startTimestamp: Math.floor(Date.now() / 1000) - 2700, // Started 45 minutes ago
-      },
-    },
-    lastUpdated: Math.floor(Date.now() / 1000),
-  };
-
-  return res.status(200).json(mockResponse);
-});
-
 export default router;
