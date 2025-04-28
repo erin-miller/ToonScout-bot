@@ -18,7 +18,7 @@ export async function DiscordRequest(endpoint, options) {
     headers: {
       Authorization: `Bot ${DISCORD_TOKEN}`,
       "Content-Type": "application/json; charset=UTF-8",
-      "User-Agent": "ToonScout (https://github.com/erin-miller/ToonScout-bot)",
+      "User-Agent": process.env.USER_AGENT,
     },
     ...options,
   });
@@ -126,7 +126,7 @@ export async function loadCommands(app) {
 
   const commandsPath = path.resolve(__dirname, "commands");
   const commandFiles = readdirSync(commandsPath).filter((file) =>
-    file.endsWith(".js"),
+    file.endsWith(".js")
   );
 
   for (const file of commandFiles) {
@@ -137,7 +137,7 @@ export async function loadCommands(app) {
       app.commands.set(command.data.name, command);
     } else {
       console.log(
-        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`,
+        `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
       );
     }
   }

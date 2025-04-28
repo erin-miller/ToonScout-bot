@@ -30,7 +30,7 @@ export async function execute(req, res, target) {
     embed.addFields(
       { name: "Cog", value: cogText, inline: true },
       { name: "District", value: districtText, inline: true },
-      { name: "Progress", value: progText, inline: true },
+      { name: "Progress", value: progText, inline: true }
     );
   } else {
     embed.addFields({
@@ -51,8 +51,8 @@ async function getInvasions() {
   const response = await fetch(
     "https://www.toontownrewritten.com/api/invasions",
     {
-      headers: { "User-Agent": "ToonScout" },
-    },
+      headers: { "User-Agent": process.env.USER_AGENT },
+    }
   );
 
   if (response.ok) {

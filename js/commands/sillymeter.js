@@ -37,7 +37,7 @@ export async function execute(req, res, target) {
 
       const totalPoints = meter.rewardPoints.reduce(
         (acc, points) => acc + points,
-        0,
+        0
       );
 
       const rewardPercentages = meter.rewardPoints.map((points) => {
@@ -56,7 +56,7 @@ export async function execute(req, res, target) {
       embed.setFooter({ text: `Ends in ${end}` });
       embed.addFields(
         { name: "Team", value: teams, inline: true },
-        { name: "Percentage", value: points, inline: true },
+        { name: "Percentage", value: points, inline: true }
       );
     } else if (status === "Inactive") {
       title += "The Silly Meter is cooling down...";
@@ -84,8 +84,8 @@ async function getMeter() {
   const response = await fetch(
     "https://www.toontownrewritten.com/api/sillymeter",
     {
-      headers: { "User-Agent": "ToonScout" },
-    },
+      headers: { "User-Agent": process.env.USER_AGENT },
+    }
   );
 
   if (response.ok) {
