@@ -74,7 +74,8 @@ router.post("/get-garden", async (req, res) => {
     const plantable = calc.getPlantableFlowers();
     const progress = calc.getProgressFlowers();
     const missing = calc.getMissingFlowers();
-    const flowers = { upgrade, plantable, progress, missing };
+    const maxCombo = calc.getComboLevel();
+    const flowers = { maxCombo, upgrade, plantable, progress, missing };
 
     if (flowers) {
       return res.status(200).json(flowers);
