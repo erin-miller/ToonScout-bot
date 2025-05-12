@@ -9,14 +9,7 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    environment:
-      NODE_ENV: dev
-      PORT: 3001
-      MONGODB_URI: mongodb://mongo:27017/scoutData
-      DISCORD_API_URL: https://discord.com/api
-      USER_AGENT: ToonScout
-      ALLOWED_ORIGINS: http://localhost:3000
-      COOKIE_DOMAIN: undefined
+    env_file: .env
     depends_on:
       - mongo
 
