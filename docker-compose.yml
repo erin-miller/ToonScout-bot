@@ -1,0 +1,32 @@
+services:
+  bot:
+    container_name: ts-bot
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      NODE_ENV: dev
+      PORT: 3001
+      MONGODB_URI: mongodb://mongo:27017/scoutData
+      DISCORD_API_URL: https://discord.com/api
+      USER_AGENT: ToonScout
+      ALLOWED_ORIGINS: http://localhost:3000
+      COOKIE_DOMAIN: undefined
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
