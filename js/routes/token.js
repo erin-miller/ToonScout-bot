@@ -5,6 +5,7 @@ import {
 } from "../db/tokenData/tokenService.js";
 
 const router = express.Router();
+console.log(process.env.NODE_ENV);
 
 router.post("/store-token", async (req, res) => {
   const { userId, accessToken, expiresAt } = req.body;
@@ -18,7 +19,7 @@ router.post("/store-token", async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production" ? true : false,
       expires: new Date(Date.now() + expiresAt * 1000),
-      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "None",
+      sameSite: process.env.NODE_ENV === "production" ? "Strict" : "Lax",
       domain:
         process.env.NODE_ENV === "production"
           ? process.env.COOKIE_DOMAIN
